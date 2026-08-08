@@ -1,6 +1,6 @@
 {
-  "name": "Speak with Edna",
-  "description": "AI-powered French learning platform and voice coach for children and beginners.",
+  "name": "SPEAK WITH EDNA: FRENCH VOICE COACH",
+  "description": "AI-powered French learning platform, CEFR curriculum (A1-C2), and voice coach for students.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

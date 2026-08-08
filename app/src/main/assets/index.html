@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speak with Edna - French Learning & AI Voice Coach</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Top Header Banner -->
+        <header class="top-header">
+            <div class="header-brand">
+                <div class="brand-logo">
+                    <span class="logo-emoji">🦉</span>
+                </div>
+                <div class="brand-text">
+                    <h1>Speak with Edna</h1>
+                    <span class="brand-subtitle"><i class="fa-solid fa-gift"></i> 100% Free Unlocked • French AI Coach</span>
+                </div>
+            </div>
+
+            <!-- Header User Stats -->
+            <div class="header-stats">
+                <div class="stat-badge xp-badge">
+                    <i class="fa-solid fa-star"></i>
+                    <span id="header-xp">980</span> <small>XP</small>
+                </div>
+                <div class="stat-badge streak-badge">
+                    <i class="fa-solid fa-fire"></i>
+                    <span id="header-streak">7</span> <small>Days</small>
+                </div>
+                <div class="stat-badge coins-badge">
+                    <i class="fa-solid fa-coins"></i>
+                    <span id="header-coins">340</span>
+                </div>
+                <div class="level-select-pill">
+                    <span class="level-label">CEFR:</span>
+                    <select id="cefr-selector" onchange="changeCefrLevel(this.value)">
+                        <option value="A1">A1 Beginner</option>
+                        <option value="A2">A2 Elementary</option>
+                        <option value="B1">B1 Intermediate</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Role Selector Controls -->
+            <div class="role-selector-container">
+                <span class="role-label"><i class="fa-solid fa-user-gear"></i> Role:</span>
+                <div class="role-pills">
+                    <button class="role-btn active" data-role="STUDENT" onclick="switchRole('STUDENT')">🎓 Student</button>
+                    <button class="role-btn" data-role="TEACHER" onclick="switchRole('TEACHER')">👩‍🏫 Teacher</button>
+                    <button class="role-btn" data-role="PARENT" onclick="switchRole('PARENT')">👨‍👩‍👧 Parent</button>
+                    <button class="role-btn" data-role="ADMIN" onclick="switchRole('ADMIN')">⚙️ Admin</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Banner Notification -->
+        <div class="free-banner">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>All CEFR A1-B1 French Lessons, Games, Voice Coach & Analytics unlocked for free!</span>
+        </div>
+
+        <!-- Main Content View Area -->
+        <main class="main-content">
+            <!-- TAB 1: LESSONS VIEW -->
+            <section id="view-lessons" class="tab-view active">
+                <div class="lessons-header">
+                    <h2>French Curriculum & Vocabulary</h2>
+                    <p>Select a category or topic to start interactive learning, audio listening & voice scoring.</p>
+                </div>
+
+                <!-- Category Chips -->
+                <div class="category-scroll-container">
+                    <div id="category-chips" class="category-chips">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Lessons Grid -->
+                <div id="lessons-grid" class="lessons-grid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Active Vocabulary / Flashcards Section -->
+                <div class="vocab-section">
+                    <div class="section-title-row">
+                        <h3><i class="fa-solid fa-book-open"></i> Vocabulary & Pronunciation Practice</h3>
+                        <span id="vocab-count-badge" class="badge">0 words</span>
+                    </div>
+                    <div id="vocab-grid" class="vocab-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: GAMES VIEW -->
+            <section id="view-games" class="tab-view">
+                <div class="games-header">
+                    <h2><i class="fa-solid fa-gamepad"></i> French Practice Games</h2>
+                    <p>Fun games to solidify your vocabulary, listening, and speed speaking!</p>
+                </div>
+
+                <div class="games-selection-grid">
+                    <div class="game-card" onclick="startMatchGame()">
+                        <div class="game-card-icon">🧩</div>
+                        <h3>Word Match</h3>
+                        <p>Match French words with their English meanings & emojis before time runs out!</p>
+                        <button class="btn btn-primary"><i class="fa-solid fa-play"></i> Play Match</button>
+                    </div>
+
+                    <div class="game-card" onclick="startMemoryGame()">
+                        <div class="game-card-icon">🎴</div>
+                        <h3>Memory Flip</h3>
+                        <p>Flip cards to find hidden matching pairs of French words and illustrations.</p>
+                        <button class="btn btn-primary"><i class="fa-solid fa-play"></i> Play Memory</button>
+                    </div>
+
+                    <div class="game-card" onclick="startSpeedSpeaking()">
+                        <div class="game-card-icon">🎙️</div>
+                        <h3>Speed Pronunciation</h3>
+                        <p>Listen and speak as many French words as possible in 60 seconds with instant voice scoring!</p>
+                        <button class="btn btn-accent"><i class="fa-solid fa-bolt"></i> Start Sprint</button>
+                    </div>
+                </div>
+
+                <!-- Active Game Arena Container -->
+                <div id="game-arena" class="game-arena hidden">
+                    <!-- Dynamic game content injected by JS -->
+                </div>
+            </section>
+
+            <!-- TAB 3: AI VOICE COACH VIEW -->
+            <section id="view-voice-coach" class="tab-view">
+                <div class="voice-coach-header">
+                    <h2><i class="fa-solid fa-robot"></i> Edna - AI French Voice Coach</h2>
+                    <p>Practice real conversations in French! Tap the mic to speak or select a scenario below.</p>
+                </div>
+
+                <!-- Scenarios Bar -->
+                <div class="scenarios-carousel">
+                    <label>Select Scenario:</label>
+                    <div id="scenarios-list" class="scenarios-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Chat Room Area -->
+                <div class="chat-container">
+                    <div class="chat-header-bar">
+                        <div class="coach-avatar">🦉</div>
+                        <div class="coach-info">
+                            <strong id="active-scenario-title">Bakery & Bistro Scenario</strong>
+                            <span class="online-indicator"><i class="fa-solid fa-circle"></i> Edna is online</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline" onclick="clearChat()"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                    </div>
+
+                    <div id="chat-messages" class="chat-messages">
+                        <!-- Dynamic Chat Messages -->
+                    </div>
+
+                    <!-- Recommended Sample Phrase Chips -->
+                    <div class="suggested-phrases">
+                        <span><i class="fa-solid fa-lightbulb"></i> Try saying:</span>
+                        <div id="sample-phrase-chips" class="phrase-chips">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Mic & Text Input Area -->
+                    <div class="chat-input-area">
+                        <button id="mic-btn" class="mic-btn" onclick="toggleSpeechRecognition()" title="Click to speak French">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        <input type="text" id="chat-text-input" placeholder="Type your response in French..." onkeypress="handleChatKeyPress(event)">
+                        <button class="send-btn" onclick="sendUserTextMessage()">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: DASHBOARD VIEW (DYNAMICALY BASED ON ROLE) -->
+            <section id="view-dashboard" class="tab-view">
+                <div id="dashboard-content">
+                    <!-- Injected by JS depending on Student, Teacher, Parent, Admin -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="lessons" onclick="switchTab('lessons')">
+                <i class="fa-solid fa-book"></i>
+                <span>Lessons</span>
+            </button>
+            <button class="nav-item" data-tab="games" onclick="switchTab('games')">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Games</span>
+            </button>
+            <button class="nav-item" data-tab="voice-coach" onclick="switchTab('voice-coach')">
+                <i class="fa-solid fa-microphone"></i>
+                <span>AI Voice</span>
+            </button>
+            <button class="nav-item" data-tab="dashboard" onclick="switchTab('dashboard')">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span id="nav-dashboard-label">Student Stats</span>
+            </button>
+        </nav>
+
+        <!-- MODAL 1: Pronunciation Tester Modal -->
+        <div id="pronounce-modal" class="modal hidden">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closePronounceModal()">&times;</button>
+                <div class="modal-header">
+                    <h3><i class="fa-solid fa-microphone"></i> Practice Pronunciation</h3>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="target-word-display">
+                        <span id="modal-emoji" class="word-emoji">🥐</span>
+                        <h2 id="modal-french-text">Le croissant</h2>
+                        <span id="modal-ipa" class="ipa-code">/lə kʁwa.sɑ̃/</span>
+                        <p id="modal-english-translation" class="english-sub">The croissant</p>
+                    </div>
+
+                    <div class="action-buttons-row">
+                        <button class="btn btn-secondary" onclick="speakText(document.getElementById('modal-french-text').innerText)">
+                            <i class="fa-solid fa-volume-high"></i> Listen First
+                        </button>
+                    </div>
+
+                    <div class="mic-recorder-box">
+                        <button id="modal-mic-btn" class="modal-mic-btn" onclick="startModalSpeechRecognition()">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        <p id="modal-speech-status">Tap the microphone and say the French word aloud!</p>
+                    </div>
+
+                    <!-- Voice Scoring Result Box -->
+                    <div id="modal-score-result" class="score-result-box hidden">
+                        <div class="score-circle" id="modal-score-circle">
+                            <span id="modal-score-value">95%</span>
+                        </div>
+                        <div class="score-details">
+                            <h4 id="modal-feedback-title">Excellent Pronunciation!</h4>
+                            <p id="modal-recognized-text">Recognized: "Le croissant"</p>
+                            <p id="modal-tip-text" class="tip-text">Tip: Keep the 'r' soft in your throat.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL 2: Lesson Quiz Modal -->
+        <div id="quiz-modal" class="modal hidden">
+            <div class="modal-content quiz-modal-content">
+                <button class="modal-close" onclick="closeQuizModal()">&times;</button>
+                <div id="quiz-container">
+                    <!-- Dynamic quiz content -->
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL 3: Custom Word Creator (Teacher) -->
+        <div id="custom-word-modal" class="modal hidden">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeCustomWordModal()">&times;</button>
+                <h3><i class="fa-solid fa-plus-circle"></i> Add New French Word</h3>
+                <div class="form-group">
+                    <label>French Word / Phrase:</label>
+                    <input type="text" id="new-word-french" placeholder="e.g. La tour Eiffel">
+                </div>
+                <div class="form-group">
+                    <label>English Translation:</label>
+                    <input type="text" id="new-word-english" placeholder="e.g. The Eiffel Tower">
+                </div>
+                <div class="form-group">
+                    <label>Emoji Icon:</label>
+                    <input type="text" id="new-word-emoji" placeholder="e.g. 🗼">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="saveCustomWord()"><i class="fa-solid fa-check"></i> Save Word</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
