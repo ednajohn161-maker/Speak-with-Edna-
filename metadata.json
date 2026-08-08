@@ -1,0 +1,6 @@
+{
+  "name": "Speak with Edna",
+  "description": "AI-powered French learning platform and voice coach for children and beginners.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
