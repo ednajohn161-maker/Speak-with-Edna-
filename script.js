@@ -582,22 +582,970 @@ function startCurrentLesson() {
     openTopicLessonModal(levelKey, targetIndex);
 }
 
-// Generate Realistic Lesson Content for Any Topic
+// ==================================================
+// COMPLETE LESSON CONTENT DATABASE & CURRICULUM ENGINE
+// ==================================================
+const LESSON_CONTENT_DATABASE = {
+    // ------------------- A1 LEVEL -------------------
+    "A1-01": {
+        titleFr: "Les salutations",
+        titleEn: "Greetings and Introductions",
+        category: "Greetings",
+        objectives: [
+            "Learn formal and informal French greetings.",
+            "Say hello, goodbye, and ask how someone is doing.",
+            "Practice natural French audio pronunciation with Voice Coach Edna."
+        ],
+        vocab: [
+            { fr: "Bonjour", en: "Hello / Good morning", ipa: "/bɔ̃.ʒuʁ/", exampleFr: "Bonjour madame, comment allez-vous aujourd'hui ?", exampleEn: "Hello ma'am, how are you doing today?" },
+            { fr: "Bonsoir", en: "Good evening", ipa: "/bɔ̃.swaʁ/", exampleFr: "Bonsoir tout le monde, soyez les bienvenus.", exampleEn: "Good evening everyone, welcome." },
+            { fr: "Salut", en: "Hi / Bye (Informal)", ipa: "/sa.ly/", exampleFr: "Salut Marc ! Ça va bien ce matin ?", exampleEn: "Hi Marc! Are things going well this morning?" },
+            { fr: "Au revoir", en: "Goodbye", ipa: "/o ʁə.vwaʁ/", exampleFr: "Au revoir et à bientôt !", exampleEn: "Goodbye and see you soon!" }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Greetings & Politeness)</strong>: Use <em>'Vous'</em> for formal interactions (strangers, elders, professional) and <em>'Tu'</em> for friends and family.",
+        dialogue: [
+            { speaker: "Marie", fr: "Bonjour monsieur, comment allez-vous ?", en: "Hello sir, how are you?" },
+            { speaker: "Pierre", fr: "Très bien, merci ! Et vous ?", en: "Very well, thank you! And you?" }
+        ],
+        sentenceBuilder: {
+            target: "Bonjour comment allez vous aujourd'hui",
+            words: ["Bonjour", "comment", "allez", "vous", "aujourd'hui"]
+        },
+        speakingPrompt: "Présente-toi en français.",
+        targetSentence: "Bonjour, je m'appelle Sophie et je suis ravie de vous rencontrer.",
+        targetSentenceEn: "Hello, my name is Sophie and I am delighted to meet you.",
+        quiz: [
+            { q: "How do you say 'Good evening' formally in French?", options: ["Bonsoir", "Bonjour", "Au revoir", "Salut"], correct: 0 },
+            { q: "Which greeting is used informally among close friends?", options: ["Bonjour monsieur", "Salut !", "Bonsoir madame", "Enchanté"], correct: 1 },
+            { q: "What is the polite formal way to ask 'How are you?'", options: ["Ça va ?", "Comment allez-vous ?", "Tu es d'où ?", "Quel âge as-tu ?"], correct: 1 }
+        ]
+    },
+    "A1-02": {
+        titleFr: "Se présenter",
+        titleEn: "Introducing Yourself",
+        category: "Personal Info",
+        objectives: [
+            "State your name, age, nationality, and profession.",
+            "Use the verbs 's'appeler', 'être', and 'avoir' correctly.",
+            "Introduce yourself smoothly in French."
+        ],
+        vocab: [
+            { fr: "Je m'appelle", en: "My name is", ipa: "/ʒə ma.pɛl/", exampleFr: "Je m'appelle Thomas et j'habite à Paris.", exampleEn: "My name is Thomas and I live in Paris." },
+            { fr: "J'ai ... ans", en: "I am ... years old", ipa: "/ʒe ... ɑ̃/", exampleFr: "J'ai vingt-cinq ans.", exampleEn: "I am twenty-five years old." },
+            { fr: "Je suis étudiant(e)", en: "I am a student", ipa: "/ʒə sɥi e.ty.djɑ̃/", exampleFr: "Je suis étudiante à l'université.", exampleEn: "I am a student at the university." },
+            { fr: "Enchanté(e)", en: "Pleased to meet you", ipa: "/ɑ̃.ʃɑ̃.te/", exampleFr: "Enchanté de faire votre connaissance.", exampleEn: "Pleased to make your acquaintance." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Avoir vs Être for Age)</strong>: In French, you <em>have</em> years ('J'ai 20 ans'), unlike in English where you <em>are</em> years old.",
+        dialogue: [
+            { speaker: "Lucas", fr: "Comment tu t'appelles ?", en: "What is your name?" },
+            { speaker: "Camille", fr: "Je m'appelle Camille, j'ai 22 ans et je suis française.", en: "My name is Camille, I am 22 years old and I am French." }
+        ],
+        sentenceBuilder: {
+            target: "Je m'appelle Thomas et j'ai vingt ans",
+            words: ["Je", "m'appelle", "Thomas", "et", "j'ai", "vingt", "ans"]
+        },
+        speakingPrompt: "Présente-toi brièvement.",
+        targetSentence: "Je m'appelle Lucas, j'ai vingt-quatre ans et j'habite en France.",
+        targetSentenceEn: "My name is Lucas, I am twenty-four years old and I live in France.",
+        quiz: [
+            { q: "How do you express your age in French?", options: ["Je suis 25 ans", "J'ai 25 ans", "Je fais 25 ans", "Mon âge est 25"], correct: 1 },
+            { q: "What does 'Enchanté' mean?", options: ["Goodbye", "Pleased to meet you", "Thank you very much", "Excuse me"], correct: 1 },
+            { q: "Which verb is used for your name ('Je m'appelle')?", options: ["s'appeler", "être", "avoir", "habiter"], correct: 0 }
+        ]
+    },
+    "A1-03": {
+        titleFr: "La famille",
+        titleEn: "Family Members & Relationships",
+        category: "Family",
+        objectives: [
+            "Name primary family members in French.",
+            "Use possessive adjectives (mon, ma, mes).",
+            "Describe your family relationships."
+        ],
+        vocab: [
+            { fr: "Le père / La mère", en: "Father / Mother", ipa: "/lə pɛʁ / la mɛʁ/", exampleFr: "Mon père et ma mère sont très gentils.", exampleEn: "My father and my mother are very kind." },
+            { fr: "Le frère / La sœur", en: "Brother / Sister", ipa: "/lə fʁɛʁ / la sœʁ/", exampleFr: "J'ai un frère et deux sœurs.", exampleEn: "I have one brother and two sisters." },
+            { fr: "Les parents", en: "Parents", ipa: "/le pa.ʁɑ̃/", exampleFr: "Mes parents habitent dans une grande maison.", exampleEn: "My parents live in a big house." },
+            { fr: "L'enfant", en: "Child / Kid", ipa: "/lɑ̃.fɑ̃/", exampleFr: "Ils ont deux enfants magnifiques.", exampleEn: "They have two magnificent children." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Possessive Adjectives)</strong>: Possessives agree with the gender of the possessed noun: <em>mon père</em> (masc.), <em>ma mère</em> (fem.), <em>mes parents</em> (plural).",
+        dialogue: [
+            { speaker: "Sarah", fr: "Tu as une grande famille ?", en: "Do you have a big family?" },
+            { speaker: "Paul", fr: "Oui, j'ai deux frères, une sœur et mes grands-parents !", en: "Yes, I have two brothers, one sister and my grandparents!" }
+        ],
+        sentenceBuilder: {
+            target: "J'aime ma famille et mes parents",
+            words: ["J'aime", "ma", "famille", "et", "mes", "parents"]
+        },
+        speakingPrompt: "Décris ta famille.",
+        targetSentence: "Dans ma famille, nous sommes quatre personnes très unies.",
+        targetSentenceEn: "In my family, we are four very close people.",
+        quiz: [
+            { q: "How do you say 'My mother' in French?", options: ["Mon mère", "Ma mère", "Mes mère", "Le mère"], correct: 1 },
+            { q: "What is 'brother' in French?", options: ["Le père", "Le frère", "L'oncle", "Le fils"], correct: 1 },
+            { q: "Which possessive is used before a plural noun like 'parents'?", options: ["Mon", "Ma", "Mes", "Leur"], correct: 2 }
+        ]
+    },
+    "A1-04": {
+        titleFr: "Les nombres et l'âge",
+        titleEn: "Numbers, Age & Personal Info",
+        category: "Numbers",
+        objectives: [
+            "Count from 1 to 100 in French.",
+            "Ask and answer questions about age and telephone numbers.",
+            "Master number pronunciation."
+        ],
+        vocab: [
+            { fr: "Un, deux, trois", en: "One, two, three", ipa: "/œ̃, dø, tʁwa/", exampleFr: "Un, deux, trois, partez !", exampleEn: "One, two, three, go!" },
+            { fr: "Dix, vingt, trente", en: "Ten, twenty, thirty", ipa: "/dis, vɛ̃, tʁɑ̃t/", exampleFr: "J'ai trente euros dans mon portefeuille.", exampleEn: "I have thirty euros in my wallet." },
+            { fr: "Quel âge as-tu ?", en: "How old are you?", ipa: "/kɛl ɑʒ a ty/", exampleFr: "Quel âge as-tu, mon ami ?", exampleEn: "How old are you, my friend?" },
+            { fr: "Le numéro de téléphone", en: "Phone number", ipa: "/lə ny.me.ʁo də te.le.fɔn/", exampleFr: "Voici mon numéro de téléphone.", exampleEn: "Here is my phone number." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Phone Numbers)</strong>: Phone numbers in France are spoken in pairs of two digits (e.g. 06 12 34 56 78 -> <em>zéro six, douze...</em>).",
+        dialogue: [
+            { speaker: "Éric", fr: "Quel est ton numéro de téléphone ?", en: "What is your phone number?" },
+            { speaker: "Julie", fr: "C'est le zéro six, vingt, trente, quarante, cinquante.", en: "It is 06 20 30 40 50." }
+        ],
+        sentenceBuilder: {
+            target: "J'ai trente ans et deux enfants",
+            words: ["J me", "J'ai", "trente", "ans", "et", "deux", "enfants"]
+        },
+        speakingPrompt: "Dis ton âge et numéro de téléphone.",
+        targetSentence: "J'ai trente ans et mon numéro commence par zéro six.",
+        targetSentenceEn: "I am thirty years old and my number begins with zero six.",
+        quiz: [
+            { q: "What is '20' in French?", options: ["Dix", "Vingt", "Trente", "Quarante"], correct: 1 },
+            { q: "How do you ask someone their age informally?", options: ["Comment allez-vous ?", "Quel âge as-tu ?", "Où habites-tu ?", "Comment t'appelles-tu ?"], correct: 1 },
+            { q: "What number comes right after 'dix-neuf' (19)?", options: ["Dix-huit", "Vingt", "Vingt-et-un", "Trente"], correct: 1 }
+        ]
+    },
+    "A1-05": {
+        titleFr: "Les jours, les mois et la date",
+        titleEn: "Days, Months & Dates",
+        category: "Time & Dates",
+        objectives: [
+            "Name the 7 days of the week and 12 months.",
+            "Express today's date in standard French format.",
+            "Talk about birthday dates and calendar events."
+        ],
+        vocab: [
+            { fr: "Lundi, mardi, mercredi", en: "Monday, Tuesday, Wednesday", ipa: "/lœ̃.di, maʁ.di, mɛʁ.kʁə.di/", exampleFr: "Lundi prochain, je commence mon nouveau cours.", exampleEn: "Next Monday, I start my new course." },
+            { fr: "Aujourd'hui, c'est...", en: "Today is...", ipa: "/o.ʒuʁ.dɥi sɛ/", exampleFr: "Aujourd'hui, c'est vendredi !", exampleEn: "Today is Friday!" },
+            { fr: "Le mois de janvier", en: "The month of January", ipa: "/lə mwa də ʒɑ̃.vje/", exampleFr: "Mon anniversaire est en janvier.", exampleEn: "My birthday is in January." },
+            { fr: "La date d'aujourd'hui", en: "Today's date", ipa: "/la dat d‿o.ʒuʁ.dɥi/", exampleFr: "Nous sommes le 15 octobre.", exampleEn: "We are October 15th." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Dates in French)</strong>: Use <em>'Le' + number + month</em> (e.g., <em>Le 14 juillet</em>). Note that days and months are NOT capitalized in French!",
+        dialogue: [
+            { speaker: "Manon", fr: "Quelle est la date aujourd'hui ?", en: "What is the date today?" },
+            { speaker: "Antoine", fr: "Aujourd'hui, nous sommes le mardi dix mai.", en: "Today is Tuesday, May 10th." }
+        ],
+        sentenceBuilder: {
+            target: "Aujourd'hui nous sommes le dix mai",
+            words: ["Aujourd'hui", "nous", "sommes", "le", "dix", "mai"]
+        },
+        speakingPrompt: "Dis la date de ton anniversaire.",
+        targetSentence: "Aujourd'hui nous sommes lundi et c'est un très beau jour.",
+        targetSentenceEn: "Today is Monday and it is a very beautiful day.",
+        quiz: [
+            { q: "Are days of the week capitalized in French?", options: ["Yes always", "No, never", "Only on holidays", "Only in titles"], correct: 1 },
+            { q: "How do you say 'Today is Friday'?", options: ["Demain c'est vendredi", "Aujourd'hui c'est vendredi", "Hier c'était vendredi", "Toujours vendredi"], correct: 1 },
+            { q: "What is the correct date structure in French?", options: ["Le 15 mai", "Mai le 15", "15th de mai", "En 15 mai"], correct: 0 }
+        ]
+    },
+    "A1-06": {
+        titleFr: "Ma routine quotidienne",
+        titleEn: "Daily Routine",
+        category: "Daily Life",
+        objectives: [
+            "Describe daily activities from morning to evening.",
+            "Use reflexive verbs in the present tense (se réveiller, se lever).",
+            "Tell time for daily habits."
+        ],
+        vocab: [
+            { fr: "Se réveiller", en: "To wake up", ipa: "/sə ʁe.vɛ.je/", exampleFr: "Je me réveille à sept heures tous les matins.", exampleEn: "I wake up at seven o'clock every morning." },
+            { fr: "Prendre le petit-déjeuner", en: "To have breakfast", ipa: "/pʁɑ̃dʁ lə pə.ti de.ʒœ.ne/", exampleFr: "Je prends mon petit-déjeuner à huit heures.", exampleEn: "I eat my breakfast at eight o'clock." },
+            { fr: "S'habiller", en: "To get dressed", ipa: "/sa.bi.je/", exampleFr: "Elle s'habille rapidement pour aller travailler.", exampleEn: "She gets dressed quickly to go to work." },
+            { fr: "Se coucher", en: "To go to bed", ipa: "/sə ku.ʃe/", exampleFr: "Je me couche vers vingt-trois heures.", exampleEn: "I go to bed around eleven p.m." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Reflexive Verbs)</strong>: Reflexive verbs use pronouns matching the subject: <em>Je me réveille, tu te réveilles, il se réveille, nous nous réveillons</em>.",
+        dialogue: [
+            { speaker: "David", fr: "À quelle heure tu te réveilles le matin ?", en: "What time do you wake up in the morning?" },
+            { speaker: "Chloé", fr: "Je me réveille à sept heures et je prends un bon café.", en: "I wake up at seven o'clock and I have a nice coffee." }
+        ],
+        sentenceBuilder: {
+            target: "Je me réveille à sept heures",
+            words: ["Je", "me", "réveille", "à", "sept", "heures"]
+        },
+        speakingPrompt: "Décris ta routine quotidienne.",
+        targetSentence: "Chaque matin, je me réveille à sept heures et je prends mon petit-déjeuner.",
+        targetSentenceEn: "Every morning, I wake up at seven o'clock and eat my breakfast.",
+        quiz: [
+            { q: "What is the French verb for 'to wake up'?", options: ["Se réveiller", "Se coucher", "Manger", "Parler"], correct: 0 },
+            { q: "What is the reflexive pronoun for 'Je'?", options: ["te", "me", "se", "nous"], correct: 1 },
+            { q: "How do you say 'I go to bed at 10 p.m.'?", options: ["Je me lève à 22h", "Je me couche à 22h", "Je m'habille à 22h", "Je mange à 22h"], correct: 1 }
+        ]
+    },
+    "A1-07": {
+        titleFr: "L'école et la classe",
+        titleEn: "School and Classroom Language",
+        category: "School",
+        objectives: [
+            "Name common classroom objects.",
+            "Ask permission and understand teacher instructions.",
+            "Express school subjects you study."
+        ],
+        vocab: [
+            { fr: "Le livre / Le cahier", en: "Book / Notebook", ipa: "/lə livʁ / lə ka.je/", exampleFr: "Ouvrez votre livre à la page dix.", exampleEn: "Open your book to page ten." },
+            { fr: "Le stylo", en: "Pen", ipa: "/lə sti.lo/", exampleFr: "J'ai un stylo bleu et un crayon.", exampleEn: "I have a blue pen and a pencil." },
+            { fr: "Puis-je poser une question ?", en: "May I ask a question?", ipa: "/pɥi ʒə po.ze yn kɛs.tjɔ̃/", exampleFr: "Excusez-moi professeur, puis-je poser une question ?", exampleEn: "Excuse me teacher, may I ask a question?" },
+            { fr: "Comprendre", en: "To understand", ipa: "/kɔ̃.pʁɑ̃dʁ/", exampleFr: "Je comprends très bien la leçon.", exampleEn: "I understand the lesson very well." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Classroom Questions)</strong>: To ask polite permission, use <em>'Puis-je... ?'</em> or <em>'Est-ce que je peux... ?'</em>.",
+        dialogue: [
+            { speaker: "Élève", fr: "Est-ce que je peux répéter la phrase, s'il vous plaît ?", en: "May I repeat the sentence, please?" },
+            { speaker: "Professeur", fr: "Oui, bien sûr, écoutez attentivement !", en: "Yes, of course, listen carefully!" }
+        ],
+        sentenceBuilder: {
+            target: "J'ai un livre et un stylo",
+            words: ["J'ai", "un", "livre", "et", "un", "stylo"]
+        },
+        speakingPrompt: "Demande de l'aide en classe de français.",
+        targetSentence: "Pardon professeur, puis-je poser une question sur le vocabulaire ?",
+        targetSentenceEn: "Excuse me teacher, may I ask a question about the vocabulary?",
+        quiz: [
+            { q: "What is 'book' in French?", options: ["Le stylo", "Le livre", "La table", "Le sac"], correct: 1 },
+            { q: "How do you politely ask 'May I ask a question?'", options: ["Où est le sac ?", "Puis-je poser une question ?", "Quel est ton nom ?", "Au revoir !"], correct: 1 },
+            { q: "What does 'Écoutez' mean?", options: ["Read", "Write", "Listen", "Speak"], correct: 2 }
+        ]
+    },
+    "A1-08": {
+        titleFr: "La maison et le logement",
+        titleEn: "House, Rooms & Objects",
+        category: "House",
+        objectives: [
+            "Name rooms of a house (salon, cuisine, chambre, salle de bain).",
+            "Describe furniture and household objects.",
+            "Locate items using prepositions of place."
+        ],
+        vocab: [
+            { fr: "La maison / L'appartement", en: "House / Apartment", ipa: "/la mɛ.zɔ̃ / la.paʁ.tə.mɑ̃/", exampleFr: "J'habite dans un bel appartement au centre-ville.", exampleEn: "I live in a nice apartment downtown." },
+            { fr: "La cuisine", en: "Kitchen", ipa: "/la kɥi.zin/", exampleFr: "Maman prépare le dîner dans la cuisine.", exampleEn: "Mom is preparing dinner in the kitchen." },
+            { fr: "La chambre", en: "Bedroom", ipa: "/la ʃɑ̃bʁ/", exampleFr: "Ma chambre est très confortable.", exampleEn: "My bedroom is very comfortable." },
+            { fr: "Le lit / La table", en: "Bed / Table", ipa: "/lə li / la tabl/", exampleFr: "Il y a un grand lit dans ma chambre.", exampleEn: "There is a big bed in my bedroom." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Il y a)</strong>: Use <em>'Il y a'</em> to mean 'there is / there are'. Example: <em>Il y a trois pièces dans l'appartement.</em>",
+        dialogue: [
+            { speaker: "Alex", fr: "Comment est ta maison ?", en: "What is your house like?" },
+            { speaker: "Nathalie", fr: "Elle est grand avec un joli jardin et trois chambres.", en: "It is big with a pretty garden and three bedrooms." }
+        ],
+        sentenceBuilder: {
+            target: "Il y a une grande cuisine",
+            words: ["Il", "y", "a", "une", "grande", "cuisine"]
+        },
+        speakingPrompt: "Décris ta maison ou ton appartement.",
+        targetSentence: "J'habite dans une maison agréable avec un grand salon lumineux.",
+        targetSentenceEn: "I live in a pleasant house with a large bright living room.",
+        quiz: [
+            { q: "What room do you cook in?", options: ["La chambre", "La cuisine", "Le salon", "La salle de bain"], correct: 1 },
+            { q: "What does 'Il y a' mean?", options: ["There is / There are", "He goes", "They have", "I see"], correct: 0 },
+            { q: "Where do you sleep?", options: ["Dans la cuisine", "Dans la chambre", "Dans le garage", "Au jardin"], correct: 1 }
+        ]
+    },
+    "A1-09": {
+        titleFr: "La nourriture et les boissons",
+        titleEn: "Food and Drinks",
+        category: "Food",
+        objectives: [
+            "Name common French food and drinks.",
+            "Express preferences (j'aime, je préfère, je déteste).",
+            "Use partitive articles (du, de la, des)."
+        ],
+        vocab: [
+            { fr: "Le pain / Le croissant", en: "Bread / Croissant", ipa: "/lə pɛ̃ / lə kwasã/", exampleFr: "J'achète du pain frais tous les matins.", exampleEn: "I buy fresh bread every morning." },
+            { fr: "Le fromage", en: "Cheese", ipa: "/lə fʁɔ.maʒ/", exampleFr: "La France est célèbre pour son fromage.", exampleEn: "France is famous for its cheese." },
+            { fr: "L'eau / Le café", en: "Water / Coffee", ipa: "/lo / lə ka.fe/", exampleFr: "Je bois un café chaud le matin.", exampleEn: "I drink a hot coffee in the morning." },
+            { fr: "La pomme / La banane", en: "Apple / Banana", ipa: "/la pɔm / la ba.nan/", exampleFr: "J'aime manger une pomme verte.", exampleEn: "I like eating a green apple." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Partitive Articles)</strong>: Use <em>du</em> (masc.), <em>de la</em> (fem.), <em>de l'</em> (vowel), <em>des</em> (plural) for unspecified quantities: <em>Je bois de l'eau et du lait.</em>",
+        dialogue: [
+            { speaker: "Serveur", fr: "Qu'est-ce que vous buvez ?", en: "What are you drinking?" },
+            { speaker: "Client", fr: "Je prends de l'eau minérale et un café, s'il vous plaît.", en: "I'll have mineral water and a coffee, please." }
+        ],
+        sentenceBuilder: {
+            target: "Je mange du pain et du fromage",
+            words: ["Je", "mange", "du", "pain", "et", "du", "fromage"]
+        },
+        speakingPrompt: "Parle de tes aliments préférés.",
+        targetSentence: "J'aime boire un café au lait et manger un bon croissant chaud.",
+        targetSentenceEn: "I like drinking coffee with milk and eating a good hot croissant.",
+        quiz: [
+            { q: "Which partitive article goes with feminine nouns ('soupe')?", options: ["du", "de la", "des", "le"], correct: 1 },
+            { q: "What is 'bread' in French?", options: ["Le fromage", "Le pain", "Le jus", "La pomme"], correct: 1 },
+            { q: "How do you say 'I drink water'?", options: ["Je mange de l'eau", "Je bois de l'eau", "J'ai de l'eau", "Je fais de l'eau"], correct: 1 }
+        ]
+    },
+    "A1-10": {
+        titleFr: "Au restaurant",
+        titleEn: "Ordering Food and Drinks",
+        category: "Restaurant",
+        objectives: [
+            "Order a meal politely at a restaurant.",
+            "Ask for the menu and the bill.",
+            "Express dietary preferences."
+        ],
+        vocab: [
+            { fr: "Je voudrais...", en: "I would like...", ipa: "/ʒə vu.dʁɛ/", exampleFr: "Je voudrais le plat du jour, s'il vous plaît.", exampleEn: "I would like the dish of the day, please." },
+            { fr: "La carte / Le menu", en: "The menu", ipa: "/la kaʁt / lə mə.ny/", exampleFr: "Puis-je avoir la carte des desserts ?", exampleEn: "May I have the dessert menu?" },
+            { fr: "L'addition, s'il vous plaît", en: "The bill, please", ipa: "/la.di.sjɔ̃ sil vu plɛ/", exampleFr: "Excusez-moi, nous voudrions l'addition.", exampleEn: "Excuse me, we would like the bill." },
+            { fr: "C'est délicieux !", en: "It is delicious!", ipa: "/sɛ de.li.sjø/", exampleFr: "Ce repas était vraiment délicieux !", exampleEn: "This meal was truly delicious!" }
+        ],
+        grammarNote: "💡 <strong>Politeness Tip</strong>: Always say <em>'Je voudrais...'</em> (conditional) instead of <em>'Je veux...'</em> (too blunt) when ordering food.",
+        dialogue: [
+            { speaker: "Serveur", fr: "Vous désirez passer commande ?", en: "Would you like to order?" },
+            { speaker: "Client", fr: "Oui, je voudrais le poulet rôti avec de l'eau minérale.", en: "Yes, I would like roasted chicken with mineral water." }
+        ],
+        sentenceBuilder: {
+            target: "Je voudrais le menu s'il vous plaît",
+            words: ["Je", "voudrais", "le", "menu", "s'il", "vous", "plaît"]
+        },
+        speakingPrompt: "Passe une commande au restaurant.",
+        targetSentence: "Bonjour, je voudrais une table pour deux personnes et le menu du jour.",
+        targetSentenceEn: "Hello, I would like a table for two people and the daily menu.",
+        quiz: [
+            { q: "What is the polite phrase to order food?", options: ["Je veux", "Je voudrais", "Donne-moi", "Tu as"], correct: 1 },
+            { q: "How do you ask for the check/bill in France?", options: ["L'addition, s'il vous plaît", "Le livre, s'il vous plaît", "Merci au revoir", "La carte gratuite"], correct: 0 },
+            { q: "What does 'Le plat du jour' mean?", options: ["Daily special dish", "The plate of paper", "Yesterday's food", "Free salad"], correct: 0 }
+        ]
+    },
+    "A1-11": {
+        titleFr: "Faire les courses",
+        titleEn: "Shopping & Stores",
+        category: "Shopping",
+        objectives: [
+            "Ask for prices (Combien ça coûte ?).",
+            "Name common shops (la boulangerie, le supermarché).",
+            "Pay using euros and cash/card."
+        ],
+        vocab: [
+            { fr: "Combien ça coûte ?", en: "How much does it cost?", ipa: "/kɔ̃.bjɛ̃ sa kut/", exampleFr: "Bonjour, combien coûte ce kilo de pommes ?", exampleEn: "Hello, how much does this kilo of apples cost?" },
+            { fr: "La boulangerie", en: "The bakery", ipa: "/la bu.lɑ̃.ʒʁi/", exampleFr: "J'achète une baguette à la boulangerie.", exampleEn: "I buy a baguette at the bakery." },
+            { fr: "Le supermarché", en: "The supermarket", ipa: "/lə sy.pɛʁ.maʁ.ʃe/", exampleFr: "Faisons les courses au supermarché.", exampleEn: "Let's go grocery shopping at the supermarket." },
+            { fr: "Payer par carte / en espèces", en: "Pay by card / in cash", ipa: "/pe.je paʁ kaʁt/", exampleFr: "Puis-je payer par carte bancaire ?", exampleEn: "May I pay by credit card?" }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Prices)</strong>: Ask <em>'C'est combien ?'</em> or <em>'Combien coûte... ?'</em>. Amounts are expressed in euros (€).",
+        dialogue: [
+            { speaker: "Vendeur", fr: "Ça fera dix euros, s'il vous plaît.", en: "That will be ten euros, please." },
+            { speaker: "Client", fr: "Voilà, puis-je payer par carte bancaire ?", en: "Here you go, can I pay by card?" }
+        ],
+        sentenceBuilder: {
+            target: "Combien coûte cette belle baguette",
+            words: ["Combien", "coûte", "cette", "belle", "baguette"]
+        },
+        speakingPrompt: "Demande le prix d'un article au magasin.",
+        targetSentence: "Bonjour monsieur, combien coûtent ces délicieux croissants ?",
+        targetSentenceEn: "Hello sir, how much do these delicious croissants cost?",
+        quiz: [
+            { q: "How do you ask 'How much does it cost?'", options: ["Comment vous allez ?", "Combien ça coûte ?", "Où est le magasin ?", "Quel jour sommes-nous ?"], correct: 1 },
+            { q: "Where do you buy fresh bread in France?", options: ["À la pharmacie", "À la boulangerie", "À la banque", "Au parc"], correct: 1 },
+            { q: "What does 'Payer par carte' mean?", options: ["Pay by card", "Pay in cash", "Buy a map", "Send a postcard"], correct: 0 }
+        ]
+    },
+    "A1-12": {
+        titleFr: "Les loisirs et sports",
+        titleEn: "Hobbies and Free Time",
+        category: "Hobbies",
+        objectives: [
+            "Talk about hobbies, sports, and entertainment.",
+            "Use 'Faire du / de la' vs 'Jouer à / au'.",
+            "Express what you do on weekends."
+        ],
+        vocab: [
+            { fr: "Faire du sport", en: "To do sports", ipa: "/fɛʁ dy spɔʁ/", exampleFr: "Le week-end, j'aime faire du sport.", exampleEn: "On weekends, I like playing sports." },
+            { fr: "Jouer au football / au tennis", en: "Play football / tennis", ipa: "/ʒwe o fut.bɔl/", exampleFr: "Mon frère aime jouer au football.", exampleEn: "My brother likes playing football." },
+            { fr: "Écouter de la musique", en: "Listen to music", ipa: "/e.ku.te də la my.zik/", exampleFr: "J'écoute de la musique française le soir.", exampleEn: "I listen to French music in the evening." },
+            { fr: "Lire un livre", en: "Read a book", ipa: "/liʁ œ̃ livʁ/", exampleFr: "Pendant mon temps libre, j'aime lire un roman.", exampleEn: "During my free time, I like reading a novel." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Jouer vs Faire)</strong>: Use <em>Jouer à</em> + games/team sports (<em>jouer au tennis</em>) and <em>Faire de</em> + activities/individual sports (<em>faire du vélo, faire du piano</em>).",
+        dialogue: [
+            { speaker: "Julien", fr: "Qu'est-ce que tu fais pendant ton temps libre ?", en: "What do you do in your free time?" },
+            { speaker: "Emma", fr: "J'aime faire du vélo et écouter de la musique.", en: "I like riding a bike and listening to music." }
+        ],
+        sentenceBuilder: {
+            target: "J'aime faire du vélo le weekend",
+            words: ["J'aime", "faire", "du", "vélo", "le", "weekend"]
+        },
+        speakingPrompt: "Parle de tes loisirs préférés.",
+        targetSentence: "Pendant mon temps libre, j'adore faire du sport et lire de bons livres.",
+        targetSentenceEn: "During my free time, I love doing sports and reading good books.",
+        quiz: [
+            { q: "Which preposition goes with 'Jouer' + sports with balls?", options: ["de", "à (au/aux)", "en", "avec"], correct: 1 },
+            { q: "How do you say 'I listen to music'?", options: ["Je regarde la musique", "J'écoute de la musique", "Je lis la musique", "Je fais la musique"], correct: 1 },
+            { q: "Complete: 'Je fais ______ vélo le dimanche.'", options: ["du", "au", "à la", "des"], correct: 0 }
+        ]
+    },
+
+    // ------------------- A2 LEVEL -------------------
+    "A2-01": {
+        titleFr: "Raconter sa journée",
+        titleEn: "Talking About Your Day",
+        category: "Past & Routine",
+        objectives: [
+            "Narrate chronological events of your day.",
+            "Use temporal connectors (d'abord, ensuite, puis, enfin).",
+            "Combine present and past tenses naturally."
+        ],
+        vocab: [
+            { fr: "D'abord / Tout d'abord", en: "First of all", ipa: "/da.bɔʁ/", exampleFr: "D'abord, je prends un café noir.", exampleEn: "First of all, I take a black coffee." },
+            { fr: "Ensuite / Puis", en: "Next / Then", ipa: "/ɑ̃.sɥit / pɥi/", exampleFr: "Ensuite, je vais au travail à vélo.", exampleEn: "Next, I go to work by bicycle." },
+            { fr: "Après cela", en: "After that", ipa: "/a.pʁɛ sə.la/", exampleFr: "Après cela, je rencontre mes collègues.", exampleEn: "After that, I meet my colleagues." },
+            { fr: "Enfin / Finalement", en: "Finally", ipa: "/ɑ̃.fɛ̃ / fi.nal.mɑ̃/", exampleFr: "Enfin, je rentre à la maison vers dix-neuf heures.", exampleEn: "Finally, I return home around 7 p.m." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Chronology)</strong>: Structure your speech smoothly using order connectors: <em>D'abord... ensuite... puis... enfin...</em>.",
+        dialogue: [
+            { speaker: "Hugo", fr: "Raconte-moi ta journée d'hier !", en: "Tell me about your day yesterday!" },
+            { speaker: "Léa", fr: "D'abord j'ai travaillé, ensuite j'ai fait du sport et enfin j'ai dîné avec des amis.", en: "First I worked, then I played sports and finally I had dinner with friends." }
+        ],
+        sentenceBuilder: {
+            target: "D'abord j'ai travaillé et ensuite j'ai mangé",
+            words: ["D'abord", "j'ai", "travaillé", "et", "ensuite", "j'ai", "mangé"]
+        },
+        speakingPrompt: "Raconte ta journée typique ou passée.",
+        targetSentence: "Ce matin, je me suis levé tôt, j'ai pris mon petit-déjeuner et je suis parti travailler.",
+        targetSentenceEn: "This morning, I woke up early, ate my breakfast and left for work.",
+        quiz: [
+            { q: "Which connector means 'First of all'?", options: ["D'abord", "Enfin", "Jamais", "Pourtant"], correct: 0 },
+            { q: "What does 'Ensuite' mean?", options: ["Then / Next", "Yesterday", "Never", "Always"], correct: 0 },
+            { q: "How do you say 'Finally' at the end of a narrative?", options: ["D'abord", "Enfin", "Car", "Si"], correct: 1 }
+        ]
+    },
+    "A2-02": {
+        titleFr: "Le passé composé",
+        titleEn: "Talking About Completed Past Actions",
+        category: "Grammar",
+        objectives: [
+            "Form the passé composé with 'avoir' and 'être'.",
+            "Memorize irregular past participles (fait, vu, pris, écrit).",
+            "Describe completed events in the past."
+        ],
+        vocab: [
+            { fr: "J'ai fait", en: "I did / I made", ipa: "/ʒe fɛ/", exampleFr: "Hier, j'ai fait du sport le matin.", exampleEn: "Yesterday, I did sports in the morning." },
+            { fr: "Je suis allé(e)", en: "I went", ipa: "/ʒə sɥi.z‿a.le/", exampleFr: "Je suis allé au cinéma samedi soir.", exampleEn: "I went to the cinema Saturday evening." },
+            { fr: "J'ai vu", en: "I saw", ipa: "/ʒe vy/", exampleFr: "J'ai vu un très bon film français.", exampleEn: "I saw a very good French movie." },
+            { fr: "J'ai pris", en: "I took / I ate", ipa: "/ʒe pʁi/", exampleFr: "J'ai pris le train de huit heures.", exampleEn: "I took the eight o'clock train." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Passé Composé Auxiliary)</strong>: Verbs of movement (DR & MRS VANDERTRAMPP) use <em>Être</em> (e.g. <em>Je suis allé</em>). Most other verbs use <em>Avoir</em> (e.g. <em>J'ai mangé</em>).",
+        dialogue: [
+            { speaker: "Maxime", fr: "Qu'est-ce que tu as fait hier soir ?", en: "What did you do last night?" },
+            { speaker: "Clara", fr: "Hier soir, je suis sortie avec mes amis et nous avons mangé au restaurant.", en: "Last night, I went out with my friends and we ate at a restaurant." }
+        ],
+        sentenceBuilder: {
+            target: "Hier je suis allé au marché",
+            words: ["Hier", "je", "suis", "allé", "au", "marché"]
+        },
+        speakingPrompt: "Raconte trois choses que tu as faites hier.",
+        targetSentence: "Hier, je suis allé au marché et j'ai acheté de délicieux fruits.",
+        targetSentenceEn: "Yesterday, I went to the market and bought delicious fruit.",
+        quiz: [
+            { q: "Which auxiliary verb is used for 'aller' in the passé composé?", options: ["Être", "Avoir", "Faire", "Venir"], correct: 0 },
+            { q: "What is the past participle of 'faire'?", options: ["Faisé", "Fait", "Faisant", "Fais"], correct: 1 },
+            { q: "Translate: 'I ate a croissant.'", options: ["J'ai mangé un croissant.", "Je suis mangé un croissant.", "Je mange un croissant.", "J'ai mange un croissant."], correct: 0 }
+        ]
+    },
+    "A2-03": {
+        titleFr: "Les vacances et les voyages",
+        titleEn: "Travel and Holidays",
+        category: "Travel",
+        objectives: [
+            "Book train tickets and hotel rooms in French.",
+            "Describe past vacations and upcoming trips.",
+            "Ask for information at a tourist office."
+        ],
+        vocab: [
+            { fr: "Réserver un billet", en: "To book a ticket", ipa: "/ʁe.zɛʁ.ve œ̃ bi.jɛ/", exampleFr: "Je veux réserver un billet pour Paris.", exampleEn: "I want to book a ticket to Paris." },
+            { fr: "Les vacances", en: "Holidays / Vacation", ipa: "/le va.kɑ̃s/", exampleFr: "Pendant les vacances, je vais à la plage.", exampleEn: "During the holidays, I go to the beach." },
+            { fr: "L'hôtel / La chambre", en: "Hotel / Room", ipa: "/lo.tɛl / la ʃɑ̃bʁ/", exampleFr: "J'ai réservé une chambre avec vue sur la mer.", exampleEn: "I booked a room with a sea view." },
+            { fr: "Visiter des monuments", en: "Visit monuments", ipa: "/vi.zi.te de mo.ny.mɑ̃/", exampleFr: "Nous avons visité la Tour Eiffel.", exampleEn: "We visited the Eiffel Tower." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Prepositions of Place)</strong>: Use <em>'en'</em> for feminine countries (<em>en France, en Italie</em>) and <em>'au'</em> for masculine countries (<em>au Japon, au Canada</em>).",
+        dialogue: [
+            { speaker: "Agent", fr: "Bonjour, comment puis-je vous aider pour votre voyage ?", en: "Hello, how can I help you with your trip?" },
+            { speaker: "Voyageur", fr: "Je voudrais réserver un billet aller-retour pour Nice.", en: "I would like to book a round-trip ticket to Nice." }
+        ],
+        sentenceBuilder: {
+            target: "L'été dernier je suis parti en vacances",
+            words: ["L'été", "dernier", "je", "suis", "parti", "en", "vacances"]
+        },
+        speakingPrompt: "Raconte tes dernières vacances.",
+        targetSentence: "L'été dernier, je suis parti en vacances en France et j'ai visité de magnifiques villes.",
+        targetSentenceEn: "Last summer, I went on holiday to France and visited magnificent cities.",
+        quiz: [
+            { q: "Which preposition is used for 'France' (feminine country)?", options: ["au", "en", "à la", "dans"], correct: 1 },
+            { q: "What does 'un billet aller-retour' mean?", options: ["One-way ticket", "Round-trip ticket", "Free ticket", "Bus pass"], correct: 1 },
+            { q: "How do you say 'I booked a hotel room'?", options: ["J'ai réservé une chambre d'hôtel", "Je suis acheté un hôtel", "Je fais un hôtel", "J'ai visité l'hôtel"], correct: 0 }
+        ]
+    },
+    "A2-04": {
+        titleFr: "Décrire une personne",
+        titleEn: "Physical & Personality Descriptions",
+        category: "Descriptions",
+        objectives: [
+            "Describe hair, eyes, height, and physical appearance.",
+            "Express personality traits and character qualities.",
+            "Master agreement of descriptive adjectives."
+        ],
+        vocab: [
+            { fr: "Grand(e) / Petit(e)", en: "Tall / Short", ipa: "/ɡʁɑ̃ / pə.ti/", exampleFr: "Mon ami est grand et très dynamique.", exampleEn: "My friend is tall and very dynamic." },
+            { fr: "Les cheveux bruns / blonds", en: "Brown / Blonde hair", ipa: "/le ʃə.vø bʁœ̃/", exampleFr: "Elle a les cheveux blonds et bouclés.", exampleEn: "She has curly blonde hair." },
+            { fr: "Sympathique / Gentil(le)", en: "Friendly / Kind", ipa: "/sɛ̃.pa.tik / ʒɑ̃.ti/", exampleFr: "Le nouveau professeur est extrêmement sympathique.", exampleEn: "The new teacher is extremely friendly." },
+            { fr: "Intelligent(e) / Drôle", en: "Intelligent / Funny", ipa: "/ɛ̃.te.li.ʒɑ̃ / dʁol/", exampleFr: "C'est une personne très drôle et intelligente.", exampleEn: "He/She is a very funny and intelligent person." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Adjective Position)</strong>: BAGS adjectives (Beauty, Age, Goodness, Size - <em>beau, jeune, bon, grand</em>) come BEFORE the noun, while most color and personality adjectives come AFTER.",
+        dialogue: [
+            { speaker: "Nora", fr: "Comment est ta nouvelle amie ?", en: "What is your new friend like?" },
+            { speaker: "Sébastien", fr: "Elle est grande, a les yeux bleus et elle est très gentille et drôle !", en: "She is tall, has blue eyes and she is very kind and funny!" }
+        ],
+        sentenceBuilder: {
+            target: "Elle est grande et très sympathique",
+            words: ["Elle", "est", "grande", "et", "très", "sympathique"]
+        },
+        speakingPrompt: "Décris ton meilleur ami ou ta meilleure amie.",
+        targetSentence: "Mon meilleur ami est grand, il a les cheveux bruns et il est très généreux.",
+        targetSentenceEn: "My best friend is tall, he has brown hair and he is very generous.",
+        quiz: [
+            { q: "Which adjective comes BEFORE the noun in French?", options: ["Grand", "Bleu", "Français", "Intéressant"], correct: 0 },
+            { q: "How do you say 'She has blue eyes'?", options: ["Elle est les yeux bleus", "Elle a les yeux bleus", "Elle fait les yeux bleus", "Elle voit bleu"], correct: 1 },
+            { q: "Feminine form of 'gentil'?", options: ["gentile", "gentille", "gentiles", "gentil"], correct: 1 }
+        ]
+    },
+    "A2-05": {
+        titleFr: "La santé et le corps",
+        titleEn: "Health, Doctor Visits & Sickness",
+        category: "Health",
+        objectives: [
+            "Explain symptoms to a doctor or pharmacist.",
+            "Use the expression 'Avoir mal à...' (j'ai mal à la tête).",
+            "Understand basic medical instructions and advice."
+        ],
+        vocab: [
+            { fr: "J'ai mal à la tête", en: "I have a headache", ipa: "/ʒe mal a la tɛt/", exampleFr: "Aujourd'hui, j'ai mal à la tête et de la fièvre.", exampleEn: "Today, I have a headache and a fever." },
+            { fr: "J'ai de la fièvre", en: "I have a fever", ipa: "/ʒe də la fjɛvʁ/", exampleFr: "Le médecin dit que j'ai un peu de fièvre.", exampleEn: "The doctor says I have a slight fever." },
+            { fr: "Chez le médecin / La pharmacie", en: "At the doctor's / Pharmacy", ipa: "/la faʁ.ma.si/", exampleFr: "Je dois acheter des médicaments à la pharmacie.", exampleEn: "I must buy medicine at the pharmacy." },
+            { fr: "Se reposer", en: "To rest", ipa: "/sə ʁə.po.ze/", exampleFr: "Vous devez vous reposer pendant deux jours.", exampleEn: "You must rest for two days." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Avoir mal à)</strong>: <em>'Avoir mal à'</em> contracts with articles: <em>au dos</em> (masc.), <em>à la tête</em> (fem.), <em>aux yeux</em> (plural).",
+        dialogue: [
+            { speaker: "Médecin", fr: "Bonjour, qu'est-ce qui ne va pas aujourd'hui ?", en: "Hello, what seems to be the problem today?" },
+            { speaker: "Patient", fr: "Bonjour docteur, j'ai mal à la gorge et j'ai de la fièvre depuis hier.", en: "Hello doctor, I have a sore throat and I've had a fever since yesterday." }
+        ],
+        sentenceBuilder: {
+            target: "J'ai mal à la tête depuis ce matin",
+            words: ["J'ai", "mal", "à", "la", "tête", "depuis", "ce", "matin"]
+        },
+        speakingPrompt: "Explique tes symptômes à un médecin.",
+        targetSentence: "Bonjour docteur, j'ai mal à la gorge et je voudrais un sirop pour la toux.",
+        targetSentenceEn: "Hello doctor, I have a sore throat and I would like cough syrup.",
+        quiz: [
+            { q: "How do you say 'I have a stomach ache'?", options: ["J'ai mal au ventre", "J'ai mal la tête", "Je suis mal au ventre", "J'ai mal aux oreilles"], correct: 0 },
+            { q: "Contraction for 'à + le' (masculine body part like 'dos')?", options: ["à la", "au", "aux", "du"], correct: 1 },
+            { q: "Where do you go to buy prescribed medicine?", options: ["À la boulangerie", "À la pharmacie", "À la gare", "Au cinéma"], correct: 1 }
+        ]
+    },
+    "A2-06": {
+        titleFr: "Donner des conseils",
+        titleEn: "Giving Advice and Recommendations",
+        category: "Advice",
+        objectives: [
+            "Use modal verbs (devoir, pouvoir, falloir) to give advice.",
+            "Use the imperative form (mange sainement, repose-toi).",
+            "Suggest solutions to everyday problems."
+        ],
+        vocab: [
+            { fr: "Tu devrais...", en: "You should...", ipa: "/ty də.vʁɛ/", exampleFr: "Tu devrais boire plus d'eau tous les jours.", exampleEn: "You should drink more water every day." },
+            { fr: "Il faut...", en: "It is necessary to / You must...", ipa: "/il fo/", exampleFr: "Il faut bien dormir avant un examen.", exampleEn: "It is necessary to sleep well before an exam." },
+            { fr: "Je te conseille de...", en: "I advise you to...", ipa: "/ʒə tə kɔ̃.sɛj də/", exampleFr: "Je te conseille de faire une petite pause.", exampleEn: "I advise you to take a short break." },
+            { fr: "Fais attention !", en: "Be careful!", ipa: "/fɛ a.tɑ̃.sjɔ̃/", exampleFr: "Fais attention quand tu traverses la rue !", exampleEn: "Be careful when you cross the street!" }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Il faut + Infinitive)</strong>: Use <em>'Il faut' + infinitive verb</em> to express general necessity (e.g. <em>Il faut pratiquer le français tous les jours</em>).",
+        dialogue: [
+            { speaker: "Marc", fr: "Je suis très fatigué ces jours-ci.", en: "I am very tired these days." },
+            { speaker: "Sophie", fr: "Tu devrais te coucher plus tôt et boire de l'eau !", en: "You should go to bed earlier and drink water!" }
+        ],
+        sentenceBuilder: {
+            target: "Tu devrais faire du sport tous les jours",
+            words: ["Tu", "devrais", "faire", "du", "sport", "tous", "les", "jours"]
+        },
+        speakingPrompt: "Donne un conseil à un ami fatigué.",
+        targetSentence: "Pour rester en bonne santé, tu devrais manger équilibré et faire du sport.",
+        targetSentenceEn: "To stay healthy, you should eat a balanced diet and do exercise.",
+        quiz: [
+            { q: "Which expression means 'You should'?", options: ["Tu devrais", "Tu veux", "Tu as", "Tu fais"], correct: 0 },
+            { q: "Follow 'Il faut' with which verb form?", options: ["Infinitive", "Past participle", "Subjunctive only", "Gerund"], correct: 0 },
+            { q: "Translate: 'I advise you to rest.'", options: ["Je te conseille de te reposer.", "Je veux reposer toi.", "Tu es conseillé.", "Fais du repos."], correct: 0 }
+        ]
+    },
+
+    // ------------------- B1 LEVEL -------------------
+    "B1-01": {
+        titleFr: "Raconter une expérience passée",
+        titleEn: "Narrating Past Experiences",
+        category: "Narration",
+        objectives: [
+            "Combine Passé Composé and Imparfait accurately in complex stories.",
+            "Describe background conditions vs sudden main events.",
+            "Use expressive vocabulary for emotions and reactions."
+        ],
+        vocab: [
+            { fr: "Pendant que...", en: "While...", ipa: "/pɑ̃.dɑ̃ kə/", exampleFr: "Pendant que je me promenais, il a commencé à pleuvoir.", exampleEn: "While I was taking a walk, it started raining." },
+            { fr: "Soudain / Tout à coup", en: "Suddenly", ipa: "/su.dɛ̃ / tu.t_a ku/", exampleFr: "Soudain, un bruit étrange s'est fait entendre.", exampleEn: "Suddenly, a strange noise was heard." },
+            { fr: "Il faisait beau", en: "The weather was nice", ipa: "/il fə.zɛ bo/", exampleFr: "Ce jour-là, il faisait beau et les oiseaux chantaient.", exampleEn: "That day, the weather was nice and birds were singing." },
+            { fr: "J'ai ressenti...", en: "I felt...", ipa: "/ʒe ʁə.sɑ̃.ti/", exampleFr: "J'ai ressenti une immense joie en réussissant.", exampleEn: "I felt immense joy upon succeeding." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Passé Composé vs Imparfait)</strong>: Use <strong>Imparfait</strong> for background descriptions, habits, states of mind ('il faisait beau') and <strong>Passé Composé</strong> for specific completed actions ('soudain, il est arrivé').",
+        dialogue: [
+            { speaker: "Léon", fr: "Raconte-moi ton expérience lors de ce voyage !", en: "Tell me about your experience during that trip!" },
+            { speaker: "Élodie", fr: "Je me promenais paisiblement quand soudain j'ai aperçu un monument magnifique.", en: "I was walking peacefully when suddenly I caught sight of a magnificent monument." }
+        ],
+        sentenceBuilder: {
+            target: "Pendant que je lisais il a commencé à pleuvoir",
+            words: ["Pendant", "que", "je", "lisais", "il", "a", "commencé", "à", "pleuvoir"]
+        },
+        speakingPrompt: "Raconte un souvenir marquant de ton passé.",
+        targetSentence: "Pendant que nous voyagions en France, nous avons rencontré des personnes extraordinaires.",
+        targetSentenceEn: "While we were traveling in France, we met extraordinary people.",
+        quiz: [
+            { q: "Which tense is used for background descriptions in past stories?", options: ["Imparfait", "Passé composé", "Futur simple", "Présent"], correct: 0 },
+            { q: "Which word signals a sudden interrupting action?", options: ["Soudain", "Toujours", "Souvent", "Chaque jour"], correct: 0 },
+            { q: "Translate: 'It was sunny when he arrived.'", options: ["Il faisait beau quand il est arrivé.", "Il a fait beau quand il arrivait.", "Il fait beau quand il arrive.", "Il aura fait beau."], correct: 0 }
+        ]
+    },
+    "B1-02": {
+        titleFr: "Exprimer son opinion",
+        titleEn: "Expressing and Supporting Opinions",
+        category: "Opinion",
+        objectives: [
+            "Use nuanced introductory structures (à mon avis, selon moi, je trouve que).",
+            "Structure clear, logical arguments with 'parce que' and 'car'.",
+            "Politely support or defend a point of view."
+        ],
+        vocab: [
+            { fr: "À mon avis", en: "In my opinion", ipa: "/a mɔ̃.n_a.vi/", exampleFr: "À mon avis, les langues ouvrent des portes culturelles.", exampleEn: "In my opinion, languages open cultural doors." },
+            { fr: "Selon moi / D'après moi", en: "According to me", ipa: "/sə.lɔ̃ mwa/", exampleFr: "Selon moi, cette décision est très importante.", exampleEn: "According to me, this decision is very important." },
+            { fr: "Je pense que...", en: "I think that...", ipa: "/ʒə pɑ̃s kə/", exampleFr: "Je pense que la technologie facilite notre quotidien.", exampleEn: "I think technology facilitates our daily life." },
+            { fr: "En effet / De plus", en: "Indeed / Furthermore", ipa: "/ɑ̃.n_e.fɛ / də ply/", exampleFr: "En effet, nous devons protéger l'environnement.", exampleEn: "Indeed, we must protect the environment." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Opinion Verbs)</strong>: Affirmative opinion verbs take the <strong>indicative</strong> (<em>Je pense qu'il est intelligent</em>), whereas negative or questioning forms trigger the <strong>subjunctive</strong> (<em>Je ne pense pas qu'il soit là</em>).",
+        dialogue: [
+            { speaker: "Claire", fr: "Que penses-tu des réseaux sociaux ?", en: "What do you think of social media?" },
+            { speaker: "Julien", fr: "À mon avis, c'est très utile pour garder le contact, mais il faut faire attention à son temps.", en: "In my opinion, it's very useful for staying in touch, but one must watch their time." }
+        ],
+        sentenceBuilder: {
+            target: "À mon avis les langues sont indispensables aujourd'hui",
+            words: ["À", "mon", "avis", "les", "langues", "sont", "indispensables", "aujourd'hui"]
+        },
+        speakingPrompt: "Donne ton opinion sur un sujet d'actualité.",
+        targetSentence: "À mon avis, l'apprentissage du français offre de formidable opportunités professionnelles.",
+        targetSentenceEn: "In my opinion, learning French offers wonderful professional opportunities.",
+        quiz: [
+            { q: "Which phrase means 'In my opinion'?", options: ["À mon avis", "Au revoir", "S'il vous plaît", "Hier matin"], correct: 0 },
+            { q: "Does 'Je pense que + affirmative' take indicative or subjunctive?", options: ["Indicative", "Subjunctive", "Conditional", "Imperative"], correct: 0 },
+            { q: "What connector introduces a cause ('because')?", options: ["Parce que", "Mais", "Donc", "Pourtant"], correct: 0 }
+        ]
+    },
+    "B1-03": {
+        titleFr: "Les médias et les réseaux sociaux",
+        titleEn: "Media and Social Networks",
+        category: "Media",
+        objectives: [
+            "Discuss news, digital media, and social platforms.",
+            "Express pros and cons of digital communication.",
+            "Evaluate information reliability."
+        ],
+        vocab: [
+            { fr: "Les informations / L'actualité", en: "News / Current affairs", ipa: "/le.z_ɛ̃.fɔʁ.ma.sjɔ̃/", exampleFr: "Je suis l'actualité tous les matins sur mon téléphone.", exampleEn: "I follow current affairs every morning on my phone." },
+            { fr: "Partager du contenu", en: "To share content", ipa: "/paʁ.ta.ʒe dy kɔ̃.tə.ny/", exampleFr: "Les jeunes aiment partager des photos sur les réseaux sociaux.", exampleEn: "Young people like sharing photos on social networks." },
+            { fr: "Un avantage / Un inconvénient", en: "An advantage / A disadvantage", ipa: "/œ̃.n_a.vɑ̃.taʒ/", exampleFr: "Le principal avantage est la vitesse de communication.", exampleEn: "The main advantage is the speed of communication." },
+            { fr: "Vérifier ses sources", en: "Verify one's sources", ipa: "/ve.ʁi.fje se suʁs/", exampleFr: "Il est primordial de vérifier ses sources d'information.", exampleEn: "It is paramount to verify one's information sources." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Relative Pronouns)</strong>: Use <em>qui</em> (subject - 'les médias qui arrêtent') and <em>que/qu'</em> (direct object - 'les nouvelles que je lis').",
+        dialogue: [
+            { speaker: "Camille", fr: "Comment t'informes-tu au quotidien ?", en: "How do you stay informed daily?" },
+            { speaker: "Lucas", fr: "Je lis les journaux en ligne et j'écoute des podcasts d'actualité.", en: "I read online newspapers and listen to news podcasts." }
+        ],
+        sentenceBuilder: {
+            target: "Les réseaux sociaux permettent de garder le contact",
+            words: ["Les", "réseaux", "sociaux", "permettent", "de", "garder", "le", "contact"]
+        },
+        speakingPrompt: "Discute des avantages des médias numériques.",
+        targetSentence: "Les médias numériques facilitent l'accès à l'information mais demandent un esprit critique.",
+        targetSentenceEn: "Digital media facilitates access to information but requires critical thinking.",
+        quiz: [
+            { q: "What does 'L'actualité' mean?", options: ["Current news", "An act", "History", "Fiction"], correct: 0 },
+            { q: "Which relative pronoun acts as a SUBJECT ('the network THAT works')?", options: ["qui", "que", "où", "dont"], correct: 0 },
+            { q: "Translate: 'To verify sources.'", options: ["Vérifier ses sources", "Lire les photos", "Partager du vin", "Parler fort"], correct: 0 }
+        ]
+    },
+    "B1-04": {
+        titleFr: "L'environnement et la planète",
+        titleEn: "Environmental Issues & Climate Action",
+        category: "Environment",
+        objectives: [
+            "Discuss ecological challenges and solutions.",
+            "Use vocabulary for recycling, climate, and sustainability.",
+            "Express commitment to eco-friendly habits."
+        ],
+        vocab: [
+            { fr: "Le changement climatique", en: "Climate change", ipa: "/lə ʃɑ̃ʒ.mɑ̃ kli.ma.tik/", exampleFr: "Le changement climatique exige une action collective.", exampleEn: "Climate change demands collective action." },
+            { fr: "Protéger l'environnement", en: "Protect the environment", ipa: "/pʁo.te.ʒe lɑ̃.vi.ʁɔn.mɑ̃/", exampleFr: "Chacun doit faire des efforts pour protéger l'environnement.", exampleEn: "Everyone must make efforts to protect the environment." },
+            { fr: "Le recyclage / Recycler", en: "Recycling / To recycle", ipa: "/lə ʁə.si.klaʒ/", exampleFr: "Le tri des déchets et le recyclage sont essentiels.", exampleEn: "Waste sorting and recycling are essential." },
+            { fr: "Les énergies renouvelables", en: "Renewable energies", ipa: "/le.z_e.nɛʁ.ʒi ʁə.nu.vəl.abl/", exampleFr: "Il faut investir dans les énergies renouvelables.", exampleEn: "We must invest in renewable energies." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Subjunctive Intro)</strong>: Express obligation for the environment using <em>'Il faut que' + Subjunctive</em>: <em>Il faut que nous réduisions nos déchets.</em>",
+        dialogue: [
+            { speaker: "Valérie", fr: "Quelles actions fais-tu pour la planète ?", en: "What actions do you take for the planet?" },
+            { speaker: "Thomas", fr: "Je prends le vélo au lieu de la voiture et je recycle mes déchets.", en: "I take my bike instead of the car and I recycle my waste." }
+        ],
+        sentenceBuilder: {
+            target: "Il faut que nous protégions notre planète",
+            words: ["Il", "faut", "que", "nous", "protégions", "notre", "planète"]
+        },
+        speakingPrompt: "Propose des solutions pour protéger l'environnement.",
+        targetSentence: "Pour protéger l'environnement, nous devons réduire le plastique et favoriser les énergies propres.",
+        targetSentenceEn: "To protect the environment, we must reduce plastic and promote clean energy.",
+        quiz: [
+            { q: "What does 'Le changement climatique' mean?", options: ["Climate change", "Weather forecast", "Summer heat", "Windy day"], correct: 0 },
+            { q: "Translate: 'Renewable energy'", options: ["Les énergies renouvelables", "L'électricité ancienne", "Le gaz naturel", "Le pétrole brut"], correct: 0 },
+            { q: "Which form follows 'Il faut que'?", options: ["Subjunctive", "Infinitive", "Past tense", "Future"], correct: 0 }
+        ]
+    },
+
+    // ------------------- B2 LEVEL -------------------
+    "B2-01": {
+        titleFr: "Argumenter et défendre une opinion",
+        titleEn: "Advanced Argumentation and Debate",
+        category: "Argumentation",
+        objectives: [
+            "Construct a structured persuasive speech (introduction, points, concession, conclusion).",
+            "Use formal logical connectors (en premier lieu, néanmoins, par conséquent).",
+            "Defend complex views against counter-arguments calmly and persuasively."
+        ],
+        vocab: [
+            { fr: "En premier lieu", en: "In the first place / Firstly", ipa: "/ɑ̃ pʁə.mje ljø/", exampleFr: "En premier lieu, il convient de rappeler les faits.", exampleEn: "In the first place, it is appropriate to recall the facts." },
+            { fr: "Néanmoins / Toutefois", en: "Nevertheless / However", ipa: "/ne.ɑ̃.mwɛ̃ / tu.tfwa/", exampleFr: "Néanmoins, cette mesure présente plusieurs limites.", exampleEn: "Nevertheless, this measure presents several limitations." },
+            { fr: "Par conséquent", en: "Consequently / Therefore", ipa: "/paʁ kɔ̃.se.kɑ̃/", exampleFr: "Par conséquent, nous devons réviser notre stratégie.", exampleEn: "Therefore, we must revise our strategy." },
+            { fr: "Il est indéniable que...", en: "It is undeniable that...", ipa: "/il ɛ.t_ɛ̃.de.njabl kə/", exampleFr: "Il est indéniable que cette innovation a changé la société.", exampleEn: "It is undeniable that this innovation changed society." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Structuring Complex Speech)</strong>: Connect your arguments logically: <em>D'une part... d'autre part... néanmoins... par conséquent... en conclusion.</em>",
+        dialogue: [
+            { speaker: "Isabelle", fr: "Pensez-vous que cette réforme soit vraiment bénéfique ?", en: "Do you think this reform is truly beneficial?" },
+            { speaker: "Bertrand", fr: "En premier lieu oui, car elle simplifie les démarches. Néanmoins, il faut rester vigilant sur ses coûts.", en: "In the first place yes, as it simplifies procedures. Nevertheless, one must stay vigilant regarding costs." }
+        ],
+        sentenceBuilder: {
+            target: "Néanmoins nous devons agir avec grande prudence",
+            words: ["Néanmoins", "nous", "devons", "agir", "avec", "grande", "prudence"]
+        },
+        speakingPrompt: "Défends ton point de vue et donne au moins deux arguments.",
+        targetSentence: "Bien que cette mesure soit complexe, il est indéniable qu'elle apportera des bénéfices à long terme.",
+        targetSentenceEn: "Although this measure is complex, it is undeniable that it will bring long-term benefits.",
+        quiz: [
+            { q: "Which formal connector means 'Nevertheless'?", options: ["Néanmoins", "Parce que", "Aujourd'hui", "Puis"], correct: 0 },
+            { q: "What phrase translates to 'In the first place'?", options: ["En premier lieu", "En conclusion", "Au secours", "Par hasard"], correct: 0 },
+            { q: "Which mood follows 'Bien que...'?", options: ["Subjunctive", "Indicative", "Imperative", "Participle"], correct: 0 }
+        ]
+    },
+    "B2-02": {
+        titleFr: "Le subjonctif avancé et la nuance",
+        titleEn: "Advanced Subjunctive & Nuanced Expression",
+        category: "Advanced Grammar",
+        objectives: [
+            "Master complex subjunctive triggers (concession, emotion, doubt, necessity).",
+            "Distinguish indicative vs subjunctive subtle shifts in meaning.",
+            "Express nuance and hypothetical scenarios in formal contexts."
+        ],
+        vocab: [
+            { fr: "Bien que (+ Subjonctif)", en: "Although / Even though", ipa: "/bjɛ̃ kə/", exampleFr: "Bien qu'il faste froid, nous sommes sortis nous promener.", exampleEn: "Although it was cold, we went out for a walk." },
+            { fr: "Pourvu que (+ Subjonctif)", en: "Provided that / Let's hope that", ipa: "/puʁ.vy kə/", exampleFr: "Pourvu que le projet soit accepté à temps !", exampleEn: "Provided that the project is accepted on time!" },
+            { fr: "À condition que (+ Subjonctif)", en: "On condition that", ipa: "/a kɔ̃.di.sjɔ̃ kə/", exampleFr: "Je viendrai à condition que vous soyez présent.", exampleEn: "I will come on condition that you are present." },
+            { fr: "Avant que (+ Subjonctif)", en: "Before", ipa: "/a.vɑ̃ kə/", exampleFr: "Terminons le travail avant qu'il ne soit trop tard.", exampleEn: "Let's finish the work before it is too late." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Subjunctive Triggers)</strong>: Conjunctions like <em>bien que, à condition que, pourvu que, avant que, afin que</em> ALWAYS require the <strong>subjunctive mood</strong>.",
+        dialogue: [
+            { speaker: "Gérard", fr: "Penses-tu qu'ils réussissent l'examen ?", en: "Do you think they will pass the exam?" },
+            { speaker: "Sandrine", fr: "Bien que ce soit difficile, je suis convaincue qu'ils aient toutes leurs chances s'ils révisent.", en: "Although it is difficult, I am convinced they have every chance if they study." }
+        ],
+        sentenceBuilder: {
+            target: "Bien que ce soit difficile nous réussirons",
+            words: ["Bien", "que", "ce", "soit", "difficile", "nous", "réussirons"]
+        },
+        speakingPrompt: "Utilise 'bien que' avec le subjonctif dans une phrase.",
+        targetSentence: "Bien que ce projet demande des efforts, il est essentiel que nous le menions à bien.",
+        targetSentenceEn: "Although this project requires effort, it is essential that we carry it out successfully.",
+        quiz: [
+            { q: "Which conjunction ALWAYS requires the subjunctive mood?", options: ["Bien que", "Parce que", "Pendant que", "Puisque"], correct: 0 },
+            { q: "Subjunctive form of 'être' for 'ce' (it)?", options: ["soit", "est", "était", "sera"], correct: 0 },
+            { q: "What does 'Pourvu que...' express?", options: ["A hopeful wish / condition", "A past refusal", "A physical direction", "A mathematical total"], correct: 0 }
+        ]
+    },
+    "B2-03": {
+        titleFr: "Le monde professionnel et les réunions",
+        titleEn: "Professional French & Business Meetings",
+        category: "Business",
+        objectives: [
+            "Participate actively in corporate meetings and presentations.",
+            "Use formal register for email communications and proposals.",
+            "Negotiate and express professional disagreement diplomatically."
+        ],
+        vocab: [
+            { fr: "Animer une réunion", en: "Lead a meeting", ipa: "/a.ni.me yn ʁe.y.njɔ̃/", exampleFr: "Le directeur va animer la réunion stratégique.", exampleEn: "The director will lead the strategic meeting." },
+            { fr: "Présenter un projet", en: "Present a project", ipa: "/pʁe.zɑ̃.te œ̃ pʁɔ.ʒɛ/", exampleFr: "Je dois présenter notre projet devant le comité.", exampleEn: "I must present our project to the committee." },
+            { fr: "Trouver un compromis", en: "Find a compromise", ipa: "/tʁu.ve œ̃ kɔ̃.pʁɔ.mi/", exampleFr: "Nous avons réussi à trouver un compromis satisfaisant.", exampleEn: "We succeeded in finding a satisfying compromise." },
+            { fr: "Restant à votre disposition", en: "Remaining at your disposal", ipa: "/ʁɛs.tɑ̃ a vo.tʁə dis.po.zi.sjɔ̃/", exampleFr: "Je reste à votre entière disposition pour tout renseignement.", exampleEn: "I remain at your complete disposal for any information." }
+        ],
+        grammarNote: "💡 <strong>Grammar Tip (Formal Courtesy)</strong>: Use conditional structures in business settings (<em>'Je souhaiterais vous présenter...', 'Serait-il possible de...'</em>) to demonstrate polished professional etiquette.",
+        dialogue: [
+            { speaker: "Directeur", fr: "Bonjour à tous, commençons notre ordre du jour.", en: "Hello everyone, let's begin our agenda." },
+            { speaker: "Consultante", fr: "Merci, je souhaiterais vous exposer les conclusions de notre analyse.", en: "Thank you, I would like to present the findings of our analysis to you." }
+        ],
+        sentenceBuilder: {
+            target: "Je reste à votre entière disposition pour échanger",
+            words: ["Je", "reste", "à", "votre", "entière", "disposition", "pour", "échanger"]
+        },
+        speakingPrompt: "Fais une courte présentation professionnelle de ton projet.",
+        targetSentence: "Aujourd'hui, je souhaite vous présenter les objectifs stratégiques de notre nouveau projet.",
+        targetSentenceEn: "Today, I wish to present to you the strategic objectives of our new project.",
+        quiz: [
+            { q: "What phrase is standard in formal email sign-offs?", options: ["Je reste à votre disposition", "Bisous", "Salut mec", "À plus tard"], correct: 0 },
+            { q: "How do you politely say 'I would like to present'?", options: ["Je souhaiterais vous présenter", "Moi vouloir montrer", "Donne le projet", "Regarde ça"], correct: 0 },
+            { q: "What does 'Animer une réunion' mean?", options: ["To lead/chair a meeting", "To watch a cartoon", "To cancel an event", "To arrive late"], correct: 0 }
+        ]
+    }
+};
+
+// Smart Topic Content Generator Fallback
 function getLessonDataForTopic(levelKey, topicObj, index) {
+    if (LESSON_CONTENT_DATABASE[topicObj.id]) {
+        const entry = LESSON_CONTENT_DATABASE[topicObj.id];
+        return {
+            id: topicObj.id,
+            level: levelKey,
+            num: topicObj.num,
+            category: entry.category || getCategoryForTopic(topicObj),
+            titleFr: entry.titleFr,
+            titleEn: entry.titleEn,
+            objectives: entry.objectives,
+            vocab: entry.vocab,
+            grammarNote: entry.grammarNote,
+            dialogue: entry.dialogue || [],
+            sentenceBuilder: entry.sentenceBuilder,
+            speakingPrompt: entry.speakingPrompt || `Entraîne-toi sur le thème "${entry.titleFr}".`,
+            targetSentence: entry.targetSentence,
+            targetSentenceEn: entry.targetSentenceEn,
+            quiz: entry.quiz
+        };
+    }
+
+    // Dynamic Domain Engine based on topic keywords
     const titleFr = topicObj.french;
     const titleEn = topicObj.english;
     const cat = topicObj.category || getCategoryForTopic(topicObj);
+    const lowTitle = (titleFr + " " + titleEn).toLowerCase();
 
-    // Topic-specific vocabulary fallback generator
-    let vocabList = [
-        { fr: `${titleFr}`, en: `${titleEn}`, ipa: `/le.skpʁɛ.sjɔ̃/`, exampleFr: `J'apprends ${titleFr.toLowerCase()} en français.`, exampleEn: `I am learning ${titleEn.toLowerCase()} in French.` },
-        { fr: `Je pratique ${titleFr.toLowerCase()}`, en: `I am practicing ${titleEn.toLowerCase()}`, ipa: `/ʒə pʁa.tik/`, exampleFr: `Je pratique ${titleFr.toLowerCase()} tous les jours.`, exampleEn: `I practice ${titleEn.toLowerCase()} every day.` },
-        { fr: `C'est très utile !`, en: `That is very useful!`, ipa: `/sɛ tʁɛ.z‿y.til/`, exampleFr: `Ce vocabulaire est très utile à Paris.`, exampleEn: `This vocabulary is very useful in Paris.` },
-        { fr: `Enchanté de vous voir`, en: `Delighted to see you`, ipa: `/ɑ̃.ʃɑ̃.te də vu vwaʁ/`, exampleFr: `Bonjour, enchanté de vous voir !`, exampleEn: `Hello, delighted to see you!` }
+    let vocabList = [];
+    let grammarTip = "";
+    let dialogueList = [];
+    let targetSentence = "";
+    let targetSentenceEn = "";
+    let speakingPrompt = "";
+    let targetUnscramble = "";
+    let unscrambleWords = [];
+    let quizList = [];
+
+    if (lowTitle.includes('salutation') || lowTitle.includes('greeting') || lowTitle.includes('présent')) {
+        vocabList = [
+            { fr: "Enchanté(e)", en: "Pleased to meet you", ipa: "/ɑ̃.ʃɑ̃.te/", exampleFr: "Enchanté de faire votre connaissance.", exampleEn: "Pleased to make your acquaintance." },
+            { fr: "Bienvenue", en: "Welcome", ipa: "/bjɛ̃.və.ny/", exampleFr: "Soyez le bienvenu en France !", exampleEn: "Welcome to France!" },
+            { fr: "Comment allez-vous ?", en: "How are you? (Formal)", ipa: "/kɔ.mɑ̃.t_a.le vu/", exampleFr: "Bonjour professeur, comment allez-vous ?", exampleEn: "Hello professor, how are you?" },
+            { fr: "À bientôt", en: "See you soon", ipa: "/a bjɛ̃.to/", exampleFr: "Merci pour tout et à bientôt !", exampleEn: "Thank you for everything and see you soon!" }
+        ];
+        grammarTip = "💡 <strong>Grammar Tip</strong>: Distinguish formal <em>Vous</em> vs informal <em>Tu</em> when greeting people in French.";
+        dialogueList = [
+            { speaker: "Sophie", fr: "Bonjour, enchantée de vous rencontrer.", en: "Hello, pleased to meet you." },
+            { speaker: "Paul", fr: "Bonjour Sophie, bienvenue parmi nous !", en: "Hello Sophie, welcome among us!" }
+        ];
+        targetSentence = `Bonjour, je suis ravi de participer à ce cours sur ${titleFr.toLowerCase()}.`;
+        targetSentenceEn = `Hello, I am delighted to participate in this lesson on ${titleEn.toLowerCase()}.`;
+        speakingPrompt = `Présente-toi et salue poliment sur le sujet "${titleFr}".`;
+        targetUnscramble = `Bonjour enchanté de faire votre connaissance`;
+        unscrambleWords = ["Bonjour", "enchanté", "de", "faire", "votre", "connaissance"];
+    } else if (lowTitle.includes('passé') || lowTitle.includes('raconter') || lowTitle.includes('histoire') || lowTitle.includes('expérience')) {
+        vocabList = [
+            { fr: "Hier soir", en: "Yesterday evening", ipa: "/jɛʁ swaʁ/", exampleFr: "Hier soir, nous avons regardé un film.", exampleEn: "Yesterday evening, we watched a movie." },
+            { fr: "L'année dernière", en: "Last year", ipa: "/la.ne dɛʁ.njɛʁ/", exampleFr: "L'année dernière, j'ai voyagé en Europe.", exampleEn: "Last year, I traveled in Europe." },
+            { fr: "Pendant ce temps", en: "During this time", ipa: "/pɑ̃.dɑ̃ sə tɑ̃/", exampleFr: "Pendant ce temps, ils préparaient le repas.", exampleEn: "During this time, they were preparing the meal." },
+            { fr: "Finalement", en: "In the end / Finally", ipa: "/fi.nal.mɑ̃/", exampleFr: "Finalement, tout s'est très bien passé.", exampleEn: "In the end, everything went very well." }
+        ];
+        grammarTip = `💡 <strong>Grammar Tip (${levelKey})</strong>: When narrating events in <em>${titleFr}</em>, combine Passé Composé for main actions and Imparfait for descriptions.`;
+        dialogueList = [
+            { speaker: "Marc", fr: "Raconte-moi ce qui s'est passé !", en: "Tell me what happened!" },
+            { speaker: "Julie", fr: "Pendant que nous marchions, nous avons découvert un endroit magnifique.", en: "While we were walking, we discovered a magnificent place." }
+        ];
+        targetSentence = `Hier, j'ai vécu une expérience fantastique concernant ${titleFr.toLowerCase()}.`;
+        targetSentenceEn = `Yesterday, I had a fantastic experience concerning ${titleEn.toLowerCase()}.`;
+        speakingPrompt = `Raconte un événement passé en lien avec "${titleFr}".`;
+        targetUnscramble = `Hier nous avons passé une excellente journée`;
+        unscrambleWords = ["Hier", "nous", "avons", "passé", "une", "excellente", "journée"];
+    } else if (lowTitle.includes('subjonctif') || lowTitle.includes('conditionnel') || lowTitle.includes('défendre') || lowTitle.includes('argument') || lowTitle.includes('opinion')) {
+        vocabList = [
+            { fr: "Il est indispensable que...", en: "It is indispensable that...", ipa: "/il ɛ.t_ɛ̃.dis.pɑ̃.sabl kə/", exampleFr: "Il est indispensable que nous fassions des efforts.", exampleEn: "It is indispensable that we make efforts." },
+            { fr: "Bien que (+ Subjonctif)", en: "Although", ipa: "/bjɛ̃ kə/", exampleFr: "Bien que ce soit difficile, c'est possible.", exampleEn: "Although it is difficult, it is possible." },
+            { fr: "À mon sens", en: "In my view", ipa: "/a mɔ̃ sɑ̃s/", exampleFr: "À mon sens, il s'agit d'une priorité.", exampleEn: "In my view, it is a priority." },
+            { fr: "Soutenir une idée", en: "Support an idea", ipa: "/su.tə.niʁ yn i.de/", exampleFr: "Je souhaite soutenir cette proposition d'avenir.", exampleEn: "I wish to support this proposal for the future." }
+        ];
+        grammarTip = `💡 <strong>Advanced Grammar Tip</strong>: In ${levelKey} French, use formal connectors and subjonctif constructions to express obligation, concession, and nuanced perspective.`;
+        dialogueList = [
+            { speaker: "Professeur", fr: "Comment défendez-vous votre position ?", en: "How do you defend your position?" },
+            { speaker: "Étudiant", fr: "Bien que la situation soit complexe, je pense qu'il faille agir immédiatement.", en: "Although the situation is complex, I think we must act immediately." }
+        ];
+        targetSentence = `Il est essentiel que nous exprimions notre opinion avec clarté sur ${titleFr.toLowerCase()}.`;
+        targetSentenceEn = `It is essential that we express our opinion with clarity regarding ${titleEn.toLowerCase()}.`;
+        speakingPrompt = `Soutiens ton opinion et donne deux arguments sur "${titleFr}".`;
+        targetUnscramble = `Il est essentiel que nous agissions rapidement`;
+        unscrambleWords = ["Il", "est", "essentiel", "que", "nous", "agissions", "rapidement"];
+    } else {
+        vocabList = [
+            { fr: `Le concept de ${titleFr.toLowerCase()}`, en: `The concept of ${titleEn.toLowerCase()}`, ipa: `/lə kɔ̃.sɛpt/`, exampleFr: `Nous étudions ${titleFr.toLowerCase()} en classe.`, exampleEn: `We are studying ${titleEn.toLowerCase()} in class.` },
+            { fr: `Pratiquer au quotidien`, en: `Practice daily`, ipa: `/pʁa.ti.ke o ko.ti.djɛ̃/`, exampleFr: `Il faut pratiquer ce vocabulaire au quotidien.`, exampleEn: `One must practice this vocabulary daily.` },
+            { fr: `Exprimer une idée`, en: `Express an idea`, ipa: `/ɛks.pʁi.me yn i.de/`, exampleFr: `Je peux exprimer mon idée clairement en français.`, exampleEn: `I can express my idea clearly in French.` },
+            { fr: `Masteriser cette leçon`, en: `Master this lesson`, ipa: `/mas.tɛ.ʁi.ze/`, exampleFr: `Grâce à Edna, je maîtrise cette leçon.`, exampleEn: `Thanks to Edna, I am mastering this lesson.` }
+        ];
+        grammarTip = `💡 <strong>Grammar Tip (${levelKey} level)</strong>: When using expressions related to <em>${titleFr}</em>, make sure to pay close attention to article agreements, proper verb tenses, and natural speech flow.`;
+        dialogueList = [
+            { speaker: "Edna Coach", fr: `Aujourd'hui, nous abordons la leçon sur ${titleFr}.`, en: `Today, we tackle the lesson on ${titleEn}.` },
+            { speaker: "Apprenant", fr: "Je suis prêt à pratiquer mes phrases et mon vocabulaire !", en: "I am ready to practice my sentences and vocabulary!" }
+        ];
+        targetSentence = `Aujourd'hui, je maîtrise parfaitement la leçon sur ${titleFr.toLowerCase()} en français.`;
+        targetSentenceEn = `Today, I am perfectly mastering the lesson on ${titleEn.toLowerCase()} in French.`;
+        speakingPrompt = `Exprime une phrase complète en français sur "${titleFr}".`;
+        targetUnscramble = `Je peux parler de ${titleFr.toLowerCase()} avec assurance`;
+        unscrambleWords = ["Je", "peux", "parler", "de", titleFr.toLowerCase(), "avec", "assurance"];
+    }
+
+    quizList = [
+        {
+            q: `Which French phrase best corresponds to "${titleEn}"?`,
+            options: [titleFr, "Au revoir", "S'il vous plaît", "Merci beaucoup"],
+            correct: 0
+        },
+        {
+            q: `In ${levelKey} French, how do you correctly start a sentence on "${titleFr}"?`,
+            options: [`Dans cette leçon sur ${titleFr.toLowerCase()}...`, "Au revoir madame", "Je n'aime pas du tout", "À demain matin"],
+            correct: 0
+        },
+        {
+            q: `Which response demonstrates polite communication in French?`,
+            options: ["Non jamais", "Tout à fait, je suis d'accord avec vous !", "Chut !", "Rien du tout"],
+            correct: 1
+        }
     ];
-
-    const targetUnscramble = `Je peux parler de ${titleFr.toLowerCase()} en français`;
-    const unscrambleWords = ["Je", "peux", "parler", "de", titleFr.toLowerCase(), "en", "français"];
 
     return {
         id: topicObj.id,
@@ -608,41 +1556,27 @@ function getLessonDataForTopic(levelKey, topicObj, index) {
         titleEn: titleEn,
         objectives: [
             `Master essential expressions for "${titleFr}" (${titleEn}).`,
-            `Develop authentic French pronunciation & intonation.`,
+            `Develop authentic ${levelKey}-level French pronunciation & intonation.`,
             `Complete oral practice with Voice Coach Edna (+50 XP).`
         ],
         vocab: vocabList,
-        grammarNote: `💡 <strong>Grammar Tip (${cat})</strong>: When discussing <em>${titleFr}</em> in ${levelKey} French, pay attention to correct gender agreement, article usage (<em>le, la, les, un, une</em>), and fluid liaison.`,
+        grammarNote: grammarTip,
+        dialogue: dialogueList,
         sentenceBuilder: {
             target: targetUnscramble,
             words: unscrambleWords
         },
-        targetSentence: `Bonjour Edna ! Aujourd'hui je maîtrise ${titleFr.toLowerCase()} en français.`,
-        targetSentenceEn: `Hello Edna! Today I am mastering ${titleEn.toLowerCase()} in French.`,
-        quiz: [
-            {
-                q: `What is the French expression for "${titleEn}"?`,
-                options: [titleFr, "Au revoir", "Merci beaucoup", "S'il vous plaît"],
-                correct: 0
-            },
-            {
-                q: `Complete the sentence: "Je veux étudier ______ avec Edna."`,
-                options: ["la soupe", titleFr.toLowerCase(), "le train", "hier"],
-                correct: 1
-            },
-            {
-                q: `Which response is appropriate for polite agreement in French?`,
-                options: ["Non merci", "Tout à fait, d'accord !", "Au revoir", "Jamais"],
-                correct: 1
-            }
-        ]
+        speakingPrompt: speakingPrompt,
+        targetSentence: targetSentence,
+        targetSentenceEn: targetSentenceEn,
+        quiz: quizList
     };
 }
 
-// Open Topic Lesson Modal
+// Open Topic Lesson Modal with Full Curriculum Features
 function openTopicLessonModal(levelKey, topicIndex) {
     const levelData = CEFR_CURRICULUM[levelKey];
-    const topicObj = levelData.topics[topicIndex];
+    const topicObj = levelData ? levelData.topics[topicIndex] : null;
     if (!topicObj) return;
 
     const lessonData = getLessonDataForTopic(levelKey, topicObj, topicIndex);
@@ -678,7 +1612,7 @@ function openTopicLessonModal(levelKey, topicIndex) {
             </ul>
         </div>
 
-        <!-- Section 2: Vocabulary -->
+        <!-- Section 2: Vocabulary Cards -->
         <div class="lesson-section-card">
             <h3>📚 Key Phrases & Vocabulary</h3>
             <div class="lesson-vocab-grid">
@@ -687,13 +1621,16 @@ function openTopicLessonModal(levelKey, topicIndex) {
                         <div class="fr-word">${v.fr}</div>
                         <div class="ipa-tag">${v.ipa}</div>
                         <div class="en-word">${v.en}</div>
-                        <div style="font-size:11px; color:#64748b; margin-top:4px; font-style:italic;">"${v.exampleFr}" (${v.exampleEn})</div>
+                        <div style="margin-top:6px; padding:6px 8px; background:#f8fafc; border-radius:6px; border-left:2.5px solid #2563eb;">
+                            <div style="font-size:12px; font-weight:700; color:#0f172a;">🇫🇷 "${v.exampleFr}"</div>
+                            <div style="font-size:11px; color:#475569; font-style:italic;">🇬🇧 "${v.exampleEn}"</div>
+                        </div>
                         <div class="vocab-item-actions" style="margin-top:8px;">
                             <button class="btn btn-sm btn-outline" onclick="speakText('${v.fr.replace(/'/g, "\\'")}')">
-                                <i class="fa-solid fa-volume-high"></i> Listen
+                                <i class="fa-solid fa-volume-high"></i> Écouter
                             </button>
                             <button class="btn btn-sm btn-secondary" onclick="openWordPronounce('${v.fr.replace(/'/g, "\\'")}', '${v.en.replace(/'/g, "\\'")}', '${v.ipa}')">
-                                <i class="fa-solid fa-microphone"></i> Practice
+                                <i class="fa-solid fa-microphone"></i> Pratiquer
                             </button>
                         </div>
                     </div>
@@ -701,9 +1638,28 @@ function openTopicLessonModal(levelKey, topicIndex) {
             </div>
         </div>
 
+        <!-- Section 2.5: Dialogue / Useful Conversation -->
+        ${lessonData.dialogue && lessonData.dialogue.length ? `
+        <div class="lesson-section-card">
+            <h3>💬 Practice Conversation & Dialogue</h3>
+            <div class="lesson-dialogue-box" style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+                ${lessonData.dialogue.map(d => `
+                    <div style="background:#f1f5f9; border-left:4px solid #2563eb; padding:10px 14px; border-radius:0 10px 10px 0;">
+                        <div style="font-size:13px; font-weight:800; color:#1e40af;">${d.speaker}</div>
+                        <div style="font-size:14px; font-weight:700; color:#0f172a; margin-top:2px;">🇫🇷 "${d.fr}"</div>
+                        <div style="font-size:12px; color:#475569; font-style:italic; margin-top:2px;">🇬🇧 "${d.en}"</div>
+                    </div>
+                `).join('')}
+            </div>
+            <button class="btn btn-sm btn-outline" style="margin-top:12px;" onclick="speakText('${lessonData.dialogue.map(d => d.fr.replace(/'/g, "\\'")).join('. ')}')">
+                <i class="fa-solid fa-volume-high"></i> Listen Full Dialogue
+            </button>
+        </div>
+        ` : ''}
+
         <!-- Section 3: Grammar Callout -->
         <div class="lesson-section-card">
-            <h3>💡 Grammar & Usage Tip</h3>
+            <h3>💡 Grammar & Usage Focus</h3>
             <div class="grammar-callout">
                 ${lessonData.grammarNote}
             </div>
@@ -731,16 +1687,17 @@ function openTopicLessonModal(levelKey, topicIndex) {
         <div class="lesson-section-card">
             <h3>🎙️ Speak with Edna - AI Voice Coach Challenge</h3>
             <div class="voice-coach-target-box">
-                <h4>SAY THIS FRENCH SENTENCE:</h4>
-                <div class="target-fr-sentence">"${lessonData.targetSentence}"</div>
-                <div class="target-en-sentence">"${lessonData.targetSentenceEn}"</div>
+                ${lessonData.speakingPrompt ? `<div style="font-size:13px; font-weight:800; color:#2563eb; text-transform:uppercase; margin-bottom:8px; background:#dbeafe; padding:6px 12px; border-radius:8px; display:inline-block;">🎯 Prompt: "${lessonData.speakingPrompt}"</div>` : ''}
+                <h4 style="margin-top:6px;">SAY THIS FRENCH SENTENCE:</h4>
+                <div class="target-fr-sentence">🇫🇷 "${lessonData.targetSentence}"</div>
+                <div class="target-en-sentence">🇬🇧 "${lessonData.targetSentenceEn}"</div>
                 
-                <div class="voice-coach-controls">
+                <div class="voice-coach-controls" style="margin-top:14px;">
                     <button class="btn btn-secondary" onclick="speakText('${lessonData.targetSentence.replace(/'/g, "\\'")}')">
-                        <i class="fa-solid fa-volume-high"></i> Listen Model Audio
+                        <i class="fa-solid fa-volume-high"></i> Écouter Model Audio
                     </button>
                     <button id="lesson-mic-btn" class="btn btn-primary" onclick="startLessonVoiceScoring()">
-                        <i class="fa-solid fa-microphone"></i> Record & Score Voice
+                        <i class="fa-solid fa-microphone"></i> Pratiquer & Score Voice
                     </button>
                 </div>
 
@@ -774,10 +1731,14 @@ function openTopicLessonModal(levelKey, topicIndex) {
         <!-- Section 7: Finish -->
         <div class="lesson-finish-bar">
             <button class="btn btn-accent btn-block" style="padding: 14px; font-size: 16px;" onclick="completeCurrentTopic()">
-                <i class="fa-solid fa-trophy"></i> Complete Topic & Claim 50 XP
+                <i class="fa-solid fa-trophy"></i> Terminer la leçon (+50 XP)
             </button>
         </div>
     `;
+
+    renderSentenceBuilderUI();
+    document.getElementById('topic-lesson-modal').classList.remove('hidden');
+}
 
     renderSentenceBuilderUI();
     document.getElementById('topic-lesson-modal').classList.remove('hidden');
@@ -1287,59 +2248,596 @@ function clearChat() {
     initCoachChat();
 }
 
-// Games Mechanics
-function startMatchGame() {
+// ==================================================
+// GAMES ENGINE & INTERACTIVE PRACTICE MECHANICS
+// ==================================================
+const gameState = {
+    match: {
+        selectedFr: null,
+        selectedEn: null,
+        matchedPairs: [],
+        totalPairs: 5
+    },
+    memory: {
+        cards: [],
+        firstIndex: null,
+        secondIndex: null,
+        isProcessing: false,
+        matchesFound: 0,
+        movesCount: 0,
+        startTime: 0
+    },
+    speed: {
+        timeRemaining: 60,
+        timerInterval: null,
+        words: [],
+        currentIndex: 0,
+        score: 0,
+        correctCount: 0,
+        attemptsCount: 0,
+        isRecording: false
+    }
+};
+
+function closeGameArena() {
+    if (gameState.speed.timerInterval) {
+        clearInterval(gameState.speed.timerInterval);
+        gameState.speed.timerInterval = null;
+    }
     const arena = document.getElementById('game-arena');
+    if (arena) arena.classList.add('hidden');
+}
+
+// 1. WORD MATCH GAME
+function startMatchGame() {
+    closeGameArena();
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
     arena.classList.remove('hidden');
 
-    const pairs = vocabularyList.slice(0, 4);
+    const source = [...vocabularyList, ...appState.customWords];
+    const pool = [...source].sort(() => 0.5 - Math.random()).slice(0, 5);
+
+    gameState.match.selectedFr = null;
+    gameState.match.selectedEn = null;
+    gameState.match.matchedPairs = [];
+    gameState.match.totalPairs = pool.length;
+
+    const frList = pool.map(p => ({ id: p.id, text: p.frenchText, emoji: p.emoji || '📖' }));
+    const enList = pool.map(p => ({ id: p.id, text: p.englishTranslation })).sort(() => 0.5 - Math.random());
+
     arena.innerHTML = `
-        <h3>🧩 Word Match Challenge</h3>
-        <p>Match the French words on the left with English on the right!</p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;">
-            <div id="french-col">
-                ${pairs.map(p => `<button class="btn btn-outline btn-block" style="margin-bottom:8px;" onclick="selectMatch('${p.id}', 'fr', this)">${p.emoji || '📖'} ${p.frenchText}</button>`).join('')}
-            </div>
-            <div id="english-col">
-                ${pairs.map(p => `<button class="btn btn-outline btn-block" style="margin-bottom:8px;" onclick="selectMatch('${p.id}', 'en', this)">${p.englishTranslation}</button>`).join('')}
+        <div class="game-arena-header">
+            <h3>🧩 Word Match Challenge</h3>
+            <div class="game-stats-bar">
+                <span id="match-score-badge"><i class="fa-solid fa-check-double"></i> Matched: 0 / ${pool.length}</span>
+                <button class="btn btn-sm btn-outline" onclick="closeGameArena()"><i class="fa-solid fa-xmark"></i> Exit</button>
             </div>
         </div>
-        <button class="btn btn-primary" style="margin-top:16px;" onclick="finishMatchGame()"><i class="fa-solid fa-check"></i> Submit Game (+30 XP)</button>
+        <p style="font-size:13px; color:#64748b; margin-bottom:12px;">Select a French word on the left, then tap its matching English translation on the right!</p>
+
+        <div class="match-game-grid">
+            <div id="match-fr-col" style="display:flex; flex-direction:column; gap:10px;">
+                ${frList.map(item => `
+                    <button class="match-item-btn" id="match-fr-${item.id}" onclick="handleMatchSelect('fr', '${item.id}')">
+                        <span>${item.emoji} ${item.text}</span>
+                        <i class="fa-regular fa-circle"></i>
+                    </button>
+                `).join('')}
+            </div>
+            <div id="match-en-col" style="display:flex; flex-direction:column; gap:10px;">
+                ${enList.map(item => `
+                    <button class="match-item-btn" id="match-en-${item.id}" onclick="handleMatchSelect('en', '${item.id}')">
+                        <span>${item.text}</span>
+                        <i class="fa-regular fa-circle"></i>
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+            <button class="btn btn-secondary" onclick="startMatchGame()"><i class="fa-solid fa-rotate-left"></i> Restart Game</button>
+            <div id="match-feedback-text" style="font-weight:700; font-size:14px; color:#2563eb;"></div>
+        </div>
     `;
 }
 
-function selectMatch(id, lang, btn) {
-    btn.style.background = "#dbeafe";
-    btn.style.borderColor = "#2563eb";
+function handleMatchSelect(lang, id) {
+    if (gameState.match.matchedPairs.includes(id)) return;
+
+    if (lang === 'fr') {
+        gameState.match.selectedFr = id;
+        document.querySelectorAll('#match-fr-col .match-item-btn').forEach(btn => {
+            if (!btn.classList.contains('matched')) btn.className = 'match-item-btn';
+        });
+        const btn = document.getElementById(`match-fr-${id}`);
+        if (btn) btn.classList.add('selected');
+    } else {
+        gameState.match.selectedEn = id;
+        document.querySelectorAll('#match-en-col .match-item-btn').forEach(btn => {
+            if (!btn.classList.contains('matched')) btn.className = 'match-item-btn';
+        });
+        const btn = document.getElementById(`match-en-${id}`);
+        if (btn) btn.classList.add('selected');
+    }
+
+    if (gameState.match.selectedFr && gameState.match.selectedEn) {
+        const frId = gameState.match.selectedFr;
+        const enId = gameState.match.selectedEn;
+        const frBtn = document.getElementById(`match-fr-${frId}`);
+        const enBtn = document.getElementById(`match-en-${enId}`);
+
+        if (frId === enId) {
+            gameState.match.matchedPairs.push(frId);
+            if (frBtn) {
+                frBtn.className = 'match-item-btn matched';
+                const icon = frBtn.querySelector('i');
+                if (icon) icon.className = 'fa-solid fa-circle-check';
+            }
+            if (enBtn) {
+                enBtn.className = 'match-item-btn matched';
+                const icon = enBtn.querySelector('i');
+                if (icon) icon.className = 'fa-solid fa-circle-check';
+            }
+
+            const source = [...vocabularyList, ...appState.customWords];
+            const wordObj = source.find(w => w.id === frId);
+            if (wordObj) speakText(wordObj.frenchText);
+
+            gameState.match.selectedFr = null;
+            gameState.match.selectedEn = null;
+
+            const scoreBadge = document.getElementById('match-score-badge');
+            if (scoreBadge) scoreBadge.innerHTML = `<i class="fa-solid fa-check-double"></i> Matched: ${gameState.match.matchedPairs.length} / ${gameState.match.totalPairs}`;
+
+            if (gameState.match.matchedPairs.length === gameState.match.totalPairs) {
+                addXP(30);
+                setTimeout(() => {
+                    renderMatchCompletionScreen();
+                }, 500);
+            }
+        } else {
+            if (frBtn) frBtn.classList.add('wrong');
+            if (enBtn) enBtn.classList.add('wrong');
+
+            setTimeout(() => {
+                if (frBtn && !frBtn.classList.contains('matched')) frBtn.className = 'match-item-btn';
+                if (enBtn && !enBtn.classList.contains('matched')) enBtn.className = 'match-item-btn';
+                gameState.match.selectedFr = null;
+                gameState.match.selectedEn = null;
+            }, 700);
+        }
+    }
 }
 
-function finishMatchGame() {
-    addXP(30);
-    alert("🎉 Excellent! Match challenge completed! +30 XP awarded.");
-    document.getElementById('game-arena').classList.add('hidden');
-}
-
-function startMemoryGame() {
+function renderMatchCompletionScreen() {
     const arena = document.getElementById('game-arena');
-    arena.classList.remove('hidden');
+    if (!arena) return;
 
     arena.innerHTML = `
-        <h3>🎴 Memory Card Flip</h3>
-        <p>Flip cards to find pairs!</p>
-        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-top:16px;">
-            ${[1,2,3,4,5,6,7,8].map(i => `
-                <div style="background:#2563eb; color:white; height:80px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; cursor:pointer;" onclick="this.style.background='#f1f5f9'; this.style.color='#000'; this.innerText='🍎 Pomme';">
-                    ❓
+        <div class="lesson-complete-card">
+            <div class="complete-badge-large">🧩</div>
+            <h2>Match Challenge Complete!</h2>
+            <p>Parfait ! You matched all French & English word pairs correctly.</p>
+
+            <div class="complete-xp-pill">
+                ⚡ +30 XP & 🪙 +15 Coins Earned!
+            </div>
+
+            <div class="complete-actions-row" style="margin-top:20px;">
+                <button class="btn btn-accent" style="padding:12px 20px;" onclick="startMatchGame()">
+                    <i class="fa-solid fa-rotate-left"></i> Play Again
+                </button>
+                <button class="btn btn-secondary" style="padding:12px 20px;" onclick="closeGameArena()">
+                    <i class="fa-solid fa-gamepad"></i> Back to Games
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// 2. MEMORY FLIP GAME
+const MEMORY_PAIRS_DATA = [
+    { pairId: 'm1', fr: 'Le croissant', en: 'Croissant', emoji: '🥐' },
+    { pairId: 'm2', fr: 'L\'école', en: 'School', emoji: '🏫' },
+    { pairId: 'm3', fr: 'Bonjour', en: 'Hello', emoji: '👋' },
+    { pairId: 'm4', fr: 'Merci', en: 'Thank you', emoji: '🙏' },
+    { pairId: 'm5', fr: 'La pomme', en: 'Apple', emoji: '🍎' },
+    { pairId: 'm6', fr: 'Le chat', en: 'Cat', emoji: '🐱' },
+    { pairId: 'm7', fr: 'Le soleil', en: 'Sun', emoji: '☀️' },
+    { pairId: 'm8', fr: 'La maison', en: 'House', emoji: '🏠' }
+];
+
+function startMemoryGame() {
+    closeGameArena();
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
+    arena.classList.remove('hidden');
+
+    let cardList = [];
+    MEMORY_PAIRS_DATA.forEach(p => {
+        cardList.push({
+            cardId: `c_${p.pairId}_fr`,
+            pairId: p.pairId,
+            type: 'fr',
+            text: p.fr,
+            sub: 'Français',
+            emoji: p.emoji,
+            flipped: false,
+            matched: false
+        });
+        cardList.push({
+            cardId: `c_${p.pairId}_en`,
+            pairId: p.pairId,
+            type: 'en',
+            text: p.en,
+            sub: 'English',
+            emoji: p.emoji,
+            flipped: false,
+            matched: false
+        });
+    });
+
+    cardList.sort(() => 0.5 - Math.random());
+
+    gameState.memory = {
+        cards: cardList,
+        firstIndex: null,
+        secondIndex: null,
+        isProcessing: false,
+        matchesFound: 0,
+        movesCount: 0,
+        startTime: Date.now()
+    };
+
+    renderMemoryBoard();
+}
+
+function renderMemoryBoard() {
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
+
+    const m = gameState.memory;
+
+    arena.innerHTML = `
+        <div class="game-arena-header">
+            <h3>🎴 Memory Card Flip</h3>
+            <div class="game-stats-bar">
+                <span>🎯 Pairs: ${m.matchesFound} / 8</span>
+                <span>🏃 Moves: ${m.movesCount}</span>
+                <button class="btn btn-sm btn-outline" onclick="closeGameArena()"><i class="fa-solid fa-xmark"></i> Exit</button>
+            </div>
+        </div>
+        <p style="font-size:13px; color:#64748b; margin-bottom:12px;">Tap cards to flip them and find all matching French words & English meanings!</p>
+
+        <div class="memory-grid">
+            ${m.cards.map((card, idx) => `
+                <div class="memory-card ${card.flipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" onclick="handleMemoryCardClick(${idx})">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front">
+                            ❓
+                        </div>
+                        <div class="memory-card-back">
+                            <div class="card-emoji">${card.emoji}</div>
+                            <div class="card-text">${card.text}</div>
+                            <div class="card-sub">${card.sub}</div>
+                        </div>
+                    </div>
                 </div>
             `).join('')}
         </div>
-        <button class="btn btn-primary" style="margin-top:16px;" onclick="finishMatchGame()"><i class="fa-solid fa-trophy"></i> Complete Game</button>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+            <button class="btn btn-secondary" onclick="startMemoryGame()"><i class="fa-solid fa-rotate-left"></i> Restart Game</button>
+            <div style="font-size:12px; color:#64748b;">Find all 8 pairs to win +50 XP!</div>
+        </div>
     `;
 }
 
-function startSpeedSpeaking() {
-    startMatchGame();
+function handleMemoryCardClick(index) {
+    const m = gameState.memory;
+    if (!m || m.isProcessing) return;
+
+    const card = m.cards[index];
+    if (!card || card.flipped || card.matched) return;
+
+    card.flipped = true;
+
+    if (m.firstIndex === null) {
+        m.firstIndex = index;
+        renderMemoryBoard();
+    } else if (m.secondIndex === null && m.firstIndex !== index) {
+        m.secondIndex = index;
+        m.movesCount++;
+        renderMemoryBoard();
+
+        const card1 = m.cards[m.firstIndex];
+        const card2 = m.cards[m.secondIndex];
+
+        if (card1.pairId === card2.pairId) {
+            card1.matched = true;
+            card2.matched = true;
+            m.matchesFound++;
+
+            const frText = card1.type === 'fr' ? card1.text : card2.text;
+            speakText(frText);
+
+            m.firstIndex = null;
+            m.secondIndex = null;
+            renderMemoryBoard();
+
+            if (m.matchesFound === 8) {
+                addXP(50);
+                setTimeout(() => {
+                    renderMemoryCompletionScreen();
+                }, 600);
+            }
+        } else {
+            m.isProcessing = true;
+            setTimeout(() => {
+                card1.flipped = false;
+                card2.flipped = false;
+                m.firstIndex = null;
+                m.secondIndex = null;
+                m.isProcessing = false;
+                renderMemoryBoard();
+            }, 900);
+        }
+    }
 }
+
+function renderMemoryCompletionScreen() {
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
+
+    const m = gameState.memory;
+    const accuracy = Math.round((8 / Math.max(m.movesCount, 8)) * 100);
+
+    arena.innerHTML = `
+        <div class="lesson-complete-card">
+            <div class="complete-badge-large">🎴</div>
+            <h2>Memory Flip Mastered!</h2>
+            <p>Félicitations ! You found all 8 matching pairs!</p>
+
+            <div class="complete-xp-pill">
+                ⚡ +50 XP & 🪙 +25 Coins Awarded!
+            </div>
+
+            <div class="complete-stats-grid" style="margin:20px 0;">
+                <div class="complete-stat-item">
+                    <div class="val">${m.movesCount}</div>
+                    <div class="lbl">Total Moves</div>
+                </div>
+                <div class="complete-stat-item">
+                    <div class="val">8 / 8</div>
+                    <div class="lbl">Pairs Matched</div>
+                </div>
+                <div class="complete-stat-item">
+                    <div class="val">${accuracy}%</div>
+                    <div class="lbl">Memory Score</div>
+                </div>
+            </div>
+
+            <div class="complete-actions-row">
+                <button class="btn btn-accent" style="padding:12px 20px;" onclick="startMemoryGame()">
+                    <i class="fa-solid fa-rotate-left"></i> Play Again
+                </button>
+                <button class="btn btn-secondary" style="padding:12px 20px;" onclick="closeGameArena()">
+                    <i class="fa-solid fa-gamepad"></i> Back to Games
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// 3. SPEED PRONUNCIATION SPRINT GAME
+function startSpeedSpeaking() {
+    closeGameArena();
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
+    arena.classList.remove('hidden');
+
+    const source = [...vocabularyList, ...appState.customWords];
+    const words = [...source].sort(() => 0.5 - Math.random());
+
+    gameState.speed = {
+        timeRemaining: 60,
+        timerInterval: null,
+        words: words,
+        currentIndex: 0,
+        score: 0,
+        correctCount: 0,
+        attemptsCount: 0,
+        isRecording: false
+    };
+
+    renderSpeedSprintArena();
+
+    gameState.speed.timerInterval = setInterval(() => {
+        gameState.speed.timeRemaining--;
+        const timerEl = document.getElementById('sprint-timer-val');
+        if (timerEl) timerEl.innerText = `${gameState.speed.timeRemaining}s`;
+
+        if (gameState.speed.timeRemaining <= 0) {
+            clearInterval(gameState.speed.timerInterval);
+            gameState.speed.timerInterval = null;
+            finishSpeedSprint();
+        }
+    }, 1000);
+}
+
+function renderSpeedSprintArena() {
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
+
+    const s = gameState.speed;
+    const currentWord = s.words[s.currentIndex % s.words.length];
+
+    arena.innerHTML = `
+        <div class="sprint-header-card">
+            <div>
+                <h3 style="margin:0; font-size:18px;">🎙️ Speed Pronunciation Sprint</h3>
+                <span style="font-size:12px; color:#cbd5e1;">Speak as many French words as possible!</span>
+            </div>
+            <div class="sprint-timer-badge" id="sprint-timer-val">
+                ${s.timeRemaining}s
+            </div>
+        </div>
+
+        <div class="sprint-word-box">
+            <div class="sprint-word-emoji">${currentWord.emoji || '🗣️'}</div>
+            <div class="sprint-word-french">"${currentWord.frenchText}"</div>
+            <div class="sprint-word-ipa">${currentWord.ipa || '/.../'}</div>
+            <div class="sprint-word-english">${currentWord.englishTranslation}</div>
+        </div>
+
+        <div class="sprint-controls">
+            <button class="btn btn-secondary btn-lg" style="padding:12px 20px;" onclick="speakText('${currentWord.frenchText.replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-volume-high"></i> Listen Model
+            </button>
+            <button id="sprint-mic-btn" class="btn btn-accent btn-lg" style="padding:12px 24px; font-size:15px;" onclick="startSprintVoiceRecording()">
+                <i class="fa-solid fa-microphone"></i> Speak & Score
+            </button>
+            <button class="btn btn-outline" style="padding:12px 16px;" onclick="skipSprintWord()">
+                <i class="fa-solid fa-forward"></i> Skip
+            </button>
+        </div>
+
+        <div id="sprint-feedback-box" style="text-align:center; min-height:40px; margin-top:12px;"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:12px; border-top:1px solid #e2e8f0;">
+            <div style="font-size:14px; font-weight:800; color:#2563eb;">⭐ Score: <span id="sprint-score-val">${s.score}</span> pts</div>
+            <div style="font-size:13px; font-weight:700; color:#10b981;">✅ Mastered: <span id="sprint-correct-val">${s.correctCount}</span> words</div>
+            <button class="btn btn-sm btn-outline" onclick="closeGameArena()"><i class="fa-solid fa-xmark"></i> Exit Sprint</button>
+        </div>
+    `;
+}
+
+function startSprintVoiceRecording() {
+    const s = gameState.speed;
+    if (!s || s.timeRemaining <= 0) return;
+
+    const currentWord = s.words[s.currentIndex % s.words.length];
+    const btn = document.getElementById('sprint-mic-btn');
+
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Listening...';
+
+    if (appState.recognitionObj) {
+        try {
+            appState.recognitionObj.start();
+            appState.recognitionObj.onresult = (e) => {
+                const spoken = e.results[0][0].transcript;
+                evaluateSprintSpeech(spoken, currentWord);
+            };
+            appState.recognitionObj.onerror = () => {
+                setTimeout(() => {
+                    evaluateSprintSpeech(currentWord.frenchText, currentWord);
+                }, 800);
+            };
+        } catch(err) {
+            setTimeout(() => {
+                evaluateSprintSpeech(currentWord.frenchText, currentWord);
+            }, 800);
+        }
+    } else {
+        setTimeout(() => {
+            evaluateSprintSpeech(currentWord.frenchText, currentWord);
+        }, 800);
+    }
+}
+
+function evaluateSprintSpeech(spokenText, wordObj) {
+    const s = gameState.speed;
+    const btn = document.getElementById('sprint-mic-btn');
+    const feedbackBox = document.getElementById('sprint-feedback-box');
+
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-microphone"></i> Speak & Score';
+
+    const score = calculateSpeechScore(spokenText, wordObj.frenchText);
+    s.attemptsCount++;
+
+    if (score >= 80) {
+        s.score += 100;
+        s.correctCount++;
+
+        if (feedbackBox) {
+            feedbackBox.innerHTML = `
+                <div style="background:#ecfdf5; color:#065f46; padding:8px 16px; border-radius:12px; font-weight:800; display:inline-block;">
+                    🌟 Parfait ! Recognized "${spokenText}" (+100 pts)
+                </div>
+            `;
+        }
+
+        const scoreEl = document.getElementById('sprint-score-val');
+        const correctEl = document.getElementById('sprint-correct-val');
+        if (scoreEl) scoreEl.innerText = s.score;
+        if (correctEl) correctEl.innerText = s.correctCount;
+
+        setTimeout(() => {
+            s.currentIndex++;
+            renderSpeedSprintArena();
+        }, 1000);
+    } else {
+        if (feedbackBox) {
+            feedbackBox.innerHTML = `
+                <div style="background:#fef2f2; color:#991b1b; padding:8px 16px; border-radius:12px; font-weight:700; display:inline-block;">
+                    👍 Close! Heard: "${spokenText}". Tap Listen or try again!
+                </div>
+            `;
+        }
+    }
+}
+
+function skipSprintWord() {
+    const s = gameState.speed;
+    s.currentIndex++;
+    renderSpeedSprintArena();
+}
+
+function finishSpeedSprint() {
+    addXP(50);
+    const arena = document.getElementById('game-arena');
+    if (!arena) return;
+
+    const s = gameState.speed;
+
+    arena.innerHTML = `
+        <div class="lesson-complete-card">
+            <div class="complete-badge-large">⚡</div>
+            <h2>60s Sprint Finished!</h2>
+            <p>Formidable ! You completed your speed pronunciation challenge.</p>
+
+            <div class="complete-xp-pill">
+                ⚡ +50 XP & 🪙 +25 Coins Earned!
+            </div>
+
+            <div class="complete-stats-grid" style="margin:20px 0;">
+                <div class="complete-stat-item">
+                    <div class="val">${s.score}</div>
+                    <div class="lbl">Sprint Score</div>
+                </div>
+                <div class="complete-stat-item">
+                    <div class="val">${s.correctCount}</div>
+                    <div class="lbl">Words Mastered</div>
+                </div>
+                <div class="complete-stat-item">
+                    <div class="val">${s.attemptsCount ? Math.round((s.correctCount / s.attemptsCount)*100) : 100}%</div>
+                    <div class="lbl">Accuracy</div>
+                </div>
+            </div>
+
+            <div class="complete-actions-row">
+                <button class="btn btn-accent" style="padding:12px 20px;" onclick="startSpeedSpeaking()">
+                    <i class="fa-solid fa-rotate-left"></i> Try Sprint Again
+                </button>
+                <button class="btn btn-secondary" style="padding:12px 20px;" onclick="closeGameArena()">
+                    <i class="fa-solid fa-gamepad"></i> Back to Games
+                </button>
+            </div>
+        </div>
+    `;
+}
+
 
 // Role Dashboard Renderer
 function renderDashboard() {

@@ -1719,5 +1719,259 @@ input:checked + .slider:before {
     justify-content: center;
 }
 
+/* ==================================================
+   GAME ARENA & MEMORY CARD STYLES
+   ================================================== */
+.game-arena-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.game-arena-header h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.game-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f1f5f9;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    color: #334155;
+}
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0 20px 0;
+}
+
+@media (max-width: 520px) {
+    .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+}
+
+.memory-card {
+    height: 95px;
+    perspective: 1000px;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.memory-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 12px;
+}
+
+.memory-card.flipped .memory-card-inner,
+.memory-card.matched .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card-front, .memory-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.memory-card-front {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    font-size: 32px;
+    border: 2px solid #3b82f6;
+}
+
+.memory-card-back {
+    background: #ffffff;
+    color: #1e293b;
+    border: 2px solid #cbd5e1;
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-back {
+    background: #ecfdf5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+.memory-card-back .card-emoji {
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.memory-card-back .card-text {
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.memory-card-back .card-sub {
+    font-size: 10px;
+    color: #64748b;
+    font-style: italic;
+}
+
+/* Speed Pronunciation Sprint Arena */
+.sprint-header-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.sprint-timer-badge {
+    background: #ef4444;
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 6px 16px;
+    border-radius: 20px;
+    animation: timerPulse 1s infinite alternate;
+}
+
+@keyframes timerPulse {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.85; transform: scale(1.03); }
+}
+
+.sprint-word-box {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0f7ff 100%);
+    border: 2.5px solid #2563eb;
+    border-radius: 20px;
+    padding: 28px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+}
+
+.sprint-word-emoji {
+    font-size: 52px;
+    margin-bottom: 8px;
+}
+
+.sprint-word-french {
+    font-size: 28px;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.sprint-word-ipa {
+    font-size: 14px;
+    color: #0284c7;
+    font-family: monospace;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.sprint-word-english {
+    font-size: 15px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.sprint-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.match-game-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+@media (max-width: 480px) {
+    .match-game-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+.match-item-btn {
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 2px solid #cbd5e1;
+    background: white;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.match-item-btn:hover {
+    border-color: #2563eb;
+    background: #f0f7ff;
+}
+
+.match-item-btn.selected {
+    border-color: #2563eb;
+    background: #dbeafe;
+    color: #1e40af;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.match-item-btn.matched {
+    border-color: #10b981;
+    background: #ecfdf5;
+    color: #065f46;
+    cursor: default;
+}
+
+.match-item-btn.wrong {
+    border-color: #ef4444;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+
 
 
